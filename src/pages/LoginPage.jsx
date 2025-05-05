@@ -1,6 +1,8 @@
 import React, { useState } from 'react'; //useState automatically re renders changes
 import { Link } from 'react-router-dom';
 import companyLogo from '../assets/GreenWaveLogo.png';
+import LogoLink from '../components/LogoLink';
+import '../styles/LoginPage.css'; 
 
 const LoginPage = () => {
     const [email,setEmail] = useState(''); // starts email and password as just an empty string
@@ -14,11 +16,9 @@ const LoginPage = () => {
 
     return (
     <div className='login-container'>
-
-        <img src={companyLogo} alt='Company Logo' />
-
+        <div className='logo-form'><LogoLink /></div>
         <form onSubmit={handleSubmit}>
-            <p> Login for financial services </p>
+            <h1> Login for financial services </h1>
 
             {/* EMAIL INPUT */}
             <input 
@@ -39,12 +39,15 @@ const LoginPage = () => {
             className='input-field'
             required
             />
-            <p>forgot password?</p>
-            <button>Login</button>
-
-            <p>Dont have an account? <Link to='/register'>Sign up</Link> </p> {/* CHANGE TO REGISTER PAGE WHEN DONE */}
+            <p className='forgot-password'>Forgot password?</p>
+            <button type='submit' className='login-button'>Login</button>
         </form>
-
+        <p>Dont have an account? <Link to='/register'>Sign up</Link> </p> 
+        <div className='footer-links'> 
+            <Link to='/'> Help</Link> {/* CHANGE ONCE HAVE NEW PAGES */}
+            <Link to='/'> Terms</Link>
+            <Link to='/'> About Us</Link>
+        </div>
     </div>
     );
 };
