@@ -1,0 +1,30 @@
+.sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    background: #e0e7ff;
+    padding: 1rem;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%);
+    z-index: 10;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .burger {
+    position: absolute;
+    top: -50px;
+    left: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .sidebar nav a {
+    display: block;
+    margin: 0.5rem 0;
+    text-decoration: none;
+    color: #1f2937;
+  }
+  

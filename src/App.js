@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import UserHome from './pages/UserHome'
 import AboutUs from './pages/AboutUs'
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -30,6 +31,8 @@ function App() {
         <Route path='/terms' element={<TermsAndConditions/>} />
         {/* Buy/Sell Stocks and Crypto */}
         <Route path='/payment' element={<PaymentUI/>} />
+        {/* User's Home page */}
+        <Route path='/userhome' element={<UserHome/>} />
       </Routes>
     </BrowserRouter>
     

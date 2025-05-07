@@ -33,7 +33,7 @@ export default function ContactUs() {
         <h2 style={{ marginBottom: "1rem" }}>Frequently Asked Questions</h2>
         <div style={{ marginBottom: "1rem" }}>
           <strong>Q: How do I reset my password?</strong>
-          <p>A: Click “Forgot Password” on the login page and follow the instructions.</p>
+          <p>A: Click our email (support@example.com) above and send us an email with “Forgot Password” as the subject. Our technical support team will help you right away!</p>
         </div>
         <div style={{ marginBottom: "1rem" }}>
           <strong>Q: Can I update my profile information?</strong>

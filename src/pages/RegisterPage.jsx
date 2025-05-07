@@ -115,14 +115,13 @@ const RegisterPage = () => {
                     required
                     />
                     <span>By checking this box I agree that I have read, understood, and consent to 
-                    GreenWaves’s <Link to='/register'> Terms and Conditions</Link> 
-                    {/* MUST CHANGE LINK TO TERMS AND CONDITION LATER */}
+                    GreenWaves’s <Link to='/terms'> Terms and Conditions</Link> 
                     </span>
                     </label>
                 </div>
                     <button type='submit'>Sign up</button>
             </form>
-            <p className='login-route'> Already have an account? <Link to='/'>Login</Link></p>
+            <p className='login-route'> Already have an account? <Link to='/login'>Login</Link></p>
         </div>
     );
 

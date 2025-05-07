@@ -1,0 +1,63 @@
+.user-home-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Header bar fix */
+  .header-bar {
+    height: 60px; /* or whatever height your HeaderBar uses */
+    flex-shrink: 0;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    z-index: 10;
+  }
+  
+  /* Main content starts BELOW header */
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  
+  /* Sidebar (optional fix if it overlaps) */
+  .sidebar-menu {
+    width: 200px;
+    background-color: #f4f4f4;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+  
+  /* Left and right columns */
+  .left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  
+  .left-column {
+    width: 35%;
+    background-color: #f9fafb;
+    gap: 1rem;
+  }
+  
+  .right-column {
+    width: 65%;
+    background-color: #ffffff;
+    gap: 1rem;
+  }
+  
+  /* Optional visual improvements for children */
+  .left-column > div,
+  .right-column > div {
+    background-color: #fff;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+  
