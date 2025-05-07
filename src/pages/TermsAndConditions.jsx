@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './TermsAndConditions.scss';
+import '../styles/TermsAndConditions.scss';
 
 export default function TermsAndConditions() {
   return (
