@@ -84,7 +84,7 @@ export default function GoalCustomizer() {
                     padding: "0.5rem 1rem",
                     borderRadius: "6px",
                     border: "1px solid #ccc",
-                    backgroundColor: category === value ? "#4f46e5" : "#fff",
+                    backgroundColor: category === value ? "green" : "#fff",
                     color: category === value ? "#fff" : "#000",
                     cursor: "pointer",
                     transition: "all 0.2s ease-in-out",
@@ -158,7 +158,7 @@ export default function GoalCustomizer() {
             onClick={handleSubmit}
             style={{
               padding: "0.75rem",
-              backgroundColor: "#4f46e5",
+              backgroundColor: "green",
               color: "white",
               border: "none",
               borderRadius: "6px",
