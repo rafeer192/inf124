@@ -23,6 +23,10 @@ function App() {
         <Route path='/profile' element={<UserProfile/>} />
         {/* Contact Us */}
         <Route path='/contact' element={<ContactUs/>} />
+        {/* Terms And Conditions */}
+        <Route path='/terms' element={<TermsAndConditions/>} />
+        {/* Buy/Sell Stocks and Crypto */}
+        <Route path='/payment' element={<PaymentUI/>} />
       </Routes>
     </BrowserRouter>
     
