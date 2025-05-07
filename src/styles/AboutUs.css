@@ -1,0 +1,68 @@
+.about-us-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f8fc;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .about-us-content {
+    max-width: 800px;
+    padding: 2rem;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #4f46e5;
+  }
+  
+  .intro-text {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .info-text {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    color: #555;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .cta-button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-btn {
+    background-color: #4f46e5;
+  }
+  
+  .login-btn:hover {
+    background-color: #3b38c4;
+  }
+  
+  .register-btn {
+    background-color: #4caf50;
+  }
+  
+  .register-btn:hover {
+    background-color: #45a049;
+  }
+  

@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AboutUs from './pages/AboutUs'
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import GoalPage from './pages/GoalPage';
@@ -11,10 +12,12 @@ import PaymentUI from './pages/PaymentUI';
 
 function App() {
   return (
-      <BrowserRouter>
+    <BrowserRouter>
       <Routes>
-        {/* TEMP MAIN PAGE */}
-        <Route path='/' element={<LoginPage/>} />
+        {/* ABOUT US PAGE == landing page */}
+        <Route path='/' element={<AboutUs />} /> 
+        {/* EXISTING USER LOG IN PAGE */}
+        <Route path='/login' element={<LoginPage/>} />
         {/* REGISTER PAGE */}
         <Route path='/register' element={<RegisterPage/>} />
         {/* Goal PAGE */}
