@@ -5,9 +5,9 @@
     overflow: hidden;
   }
   
-  /* Header bar fix */
+
   .header-bar {
-    height: 60px; /* or whatever height your HeaderBar uses */
+    height: 60px; 
     flex-shrink: 0;
     background-color: #ffffff;
     display: flex;
@@ -17,22 +17,13 @@
     z-index: 10;
   }
   
-  /* Main content starts BELOW header */
   .main-content {
     display: flex;
     flex: 1;
     overflow: hidden;
   }
   
-  /* Sidebar (optional fix if it overlaps) */
-  .sidebar-menu {
-    width: 200px;
-    background-color: #f4f4f4;
-    flex-shrink: 0;
-    overflow-y: auto;
-  }
   
-  /* Left and right columns */
   .left-column, .right-column {
     display: flex;
     flex-direction: column;
@@ -52,12 +43,16 @@
     gap: 1rem;
   }
   
-  /* Optional visual improvements for children */
   .left-column > div,
   .right-column > div {
     background-color: #fff;
     border-radius: 1rem;
     padding: 1rem;
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+
+  .chart-wrapper {
+    transform: scale(0.8); 
+    transform-origin: top center;
   }
   

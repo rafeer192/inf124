@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+  }
+  
+  .dashboard {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  .search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .info h2 {
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
+  
+  .chart-placeholder {
+    background: #ddd;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+  }
+  
+  .timeframe-options button {
+    background: #eee;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  
+  .buy-button {
+    background: #4CAF50;
+    color: white;
+    font-size: large;
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .trending ul, .holdings {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .trending li {
+    display: inline-block;
+    padding: 5px;
+    margin-right: 5px;
+    background: #eee;
+    border-radius: 5px;
+  }
+  

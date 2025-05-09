@@ -1,6 +1,5 @@
 import React from 'react';
 import HeaderBar from '../components/HeaderBar';
-import SidebarMenu from '../components/SidebarMenu';
 import TipTile from '../components/TipTile';
 import NewsTile from '../components/NewsTile';
 import PortfolioChart from '../components/PortfolioChart';
@@ -10,16 +9,20 @@ import '../styles/UserHome.css';
 export default function UserHome() {
   return (
     <div className="user-home-container">
-      <HeaderBar userName="Rafee" />
+      {/* for now, must change when backend is made  */}
+      <HeaderBar userName="Peter Anteater" /> 
       <div className="main-content">
-        <SidebarMenu />
         <div className="left-column">
           <TipTile />
           <NewsTile />
         </div>
         <div className="right-column">
-          <PortfolioChart />
-          <BudgetChart />
+          <div className="chart-wrapper">
+            <PortfolioChart />
+          </div>
+          <div className="chart-wrapper">
+            <BudgetChart />
+          </div>
         </div>
       </div>
     </div>
