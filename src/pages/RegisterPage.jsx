@@ -1,8 +1,9 @@
 import React, { useState } from 'react'; //useState automatically re renders changes
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LogoLink from '../components/LogoLink';
 import '../styles/RegisterPage.css'; 
 const RegisterPage = () => {
+    const navigate = useNavigate(); 
     const [formData,setFormData] = useState({
         firstName: '',
         lastName:'',
@@ -38,6 +39,8 @@ const RegisterPage = () => {
         event.preventDefault();
         // will send data to server later on HERE
         console.log('Registering user: ', formData)
+
+        navigate('/userhome')
       }
     return (
         <div className='register-container'>
