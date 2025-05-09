@@ -17,7 +17,7 @@ import Stocks from './pages/Stocks'
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/inf124'>
       <Routes>
         {/* ABOUT US PAGE == landing page */}
         <Route path='/' element={<AboutUs />} /> 
