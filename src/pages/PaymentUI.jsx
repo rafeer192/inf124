@@ -89,7 +89,7 @@ function PaymentUI() {
 
   return (
     <div>
-      <HeaderBar userName="Peter Anteater" /> 
+      <HeaderBar userName="Peter Anteater" className="payment__header" /> 
       <div className="payment__container">
         <main className="payment">
           <div className="payment__card">
