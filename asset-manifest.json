@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/inf124/static/css/main.b0336e5f.css",
-    "main.js": "/inf124/static/js/main.6d58d264.js",
+    "main.css": "/inf124/static/css/main.fc38af96.css",
+    "main.js": "/inf124/static/js/main.7a7976ac.js",
     "static/js/453.fd063eae.chunk.js": "/inf124/static/js/453.fd063eae.chunk.js",
     "static/media/GreenWaveLogo.png": "/inf124/static/media/GreenWaveLogo.7099605c94d862fcffe5.png",
     "static/media/petr.png": "/inf124/static/media/petr.6ae040d449161f659a8b.png",
     "static/media/logo.svg": "/inf124/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/inf124/index.html",
-    "main.b0336e5f.css.map": "/inf124/static/css/main.b0336e5f.css.map",
-    "main.6d58d264.js.map": "/inf124/static/js/main.6d58d264.js.map",
+    "main.fc38af96.css.map": "/inf124/static/css/main.fc38af96.css.map",
+    "main.7a7976ac.js.map": "/inf124/static/js/main.7a7976ac.js.map",
     "453.fd063eae.chunk.js.map": "/inf124/static/js/453.fd063eae.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b0336e5f.css",
-    "static/js/main.6d58d264.js"
+    "static/css/main.fc38af96.css",
+    "static/js/main.7a7976ac.js"
   ]
 }
