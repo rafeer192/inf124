@@ -1,24 +1,11 @@
 import React, { useState } from 'react';
-import './TermsAndConditions.scss';
+import '../styles/TermsAndConditions.scss';
 
 export default function TermsAndConditions() {
   return (
     <div className="terms">
       <div className="terms__card">
         
-        {/* HEADER */}
-        <div className="terms__header">
-          <h2 className="terms__ticker">$Ticker Symbol, Company Name</h2>
-          <div className="terms__menu">
-            <button className="menu-button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-            </button>
-          </div>
-        </div>
         
         {/* CONTENTS */}
         <div className="terms__content">
@@ -65,7 +52,7 @@ export default function TermsAndConditions() {
               <h2>Intellectual Property</h2>
             </div>
             <div className="terms__section-content">
-                <p>Our company.</p>
+                <p>Our company owns the intellectual property of this website, including but not limited to...</p>
             </div>
           </div>
         </div>

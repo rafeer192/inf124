@@ -1,8 +1,9 @@
 import React, { useState } from 'react'; //useState automatically re renders changes
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LogoLink from '../components/LogoLink';
 import '../styles/RegisterPage.css'; 
 const RegisterPage = () => {
+    const navigate = useNavigate(); 
     const [formData,setFormData] = useState({
         firstName: '',
         lastName:'',
@@ -38,6 +39,8 @@ const RegisterPage = () => {
         event.preventDefault();
         // will send data to server later on HERE
         console.log('Registering user: ', formData)
+
+        navigate('/userhome')
       }
     return (
         <div className='register-container'>
@@ -115,14 +118,13 @@ const RegisterPage = () => {
                     required
                     />
                     <span>By checking this box I agree that I have read, understood, and consent to 
-                    GreenWaves’s <Link to='/register'> Terms and Conditions</Link> 
-                    {/* MUST CHANGE LINK TO TERMS AND CONDITION LATER */}
+                    GreenWaves’s <Link to='/terms'> Terms and Conditions</Link> 
                     </span>
                     </label>
                 </div>
                     <button type='submit'>Sign up</button>
             </form>
-            <p className='login-route'> Already have an account? <Link to='/'>Login</Link></p>
+            <p className='login-route'> Already have an account? <Link to='/login'>Login</Link></p>
         </div>
     );
 
