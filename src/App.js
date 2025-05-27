@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserHome from './pages/UserHome'
@@ -10,7 +10,6 @@ import UserProfile from './pages/UserProfile';
 import ContactUs from './pages/ContactUs';
 import ContactUsLoggedIn from './pages/ContactUsLoggedIn'
 import TermsAndConditions from './pages/TermsAndConditions';
-import PaymentUI from './pages/PaymentUI';
 import Crypto from './pages/Crypto';
 import Stocks from './pages/Stocks'
 
@@ -35,13 +34,11 @@ function App() {
         <Route path='/contactloggedin' element={<ContactUsLoggedIn/>} />
         {/* Terms And Conditions */}
         <Route path='/terms' element={<TermsAndConditions/>} />
-        {/* Buy/Sell Stocks and Crypto */}
-        <Route path='/payment' element={<PaymentUI/>} />
         {/* User's Home page */}
         <Route path='/userhome' element={<UserHome/>} />
         {/* View Crypto */}
         <Route path='/crypto' element={<Crypto/>} />
-        {/* View Crypto */}
+        {/* View Stocks */}
         <Route path='/stocks' element={<Stocks/>} />
       </Routes>
     </BrowserRouter>

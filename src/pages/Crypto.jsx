@@ -1,13 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar";
 import "../styles/Crypto.css";
 
 const Crypto = () => {
-    const navigate = useNavigate();
-    const handleBuyClick = () => {
-        navigate('/payment')
-    }
+    // const navigate = useNavigate();
     return (
         <div>
             <HeaderBar userName="Peter Anteater" /> 
@@ -24,9 +21,6 @@ const Crypto = () => {
                     <button>1D</button> <button>1W</button> <button>1M</button>
                     <button>YTD</button> <button>1Y</button> <button>All</button>
                     </div>
-                </div>
-                <div className="actions">
-                    <button className="buy-button" onClick={handleBuyClick}>Trade this token</button>
                 </div>
                 <div className="trending">
                     <h3>Trending Tokens</h3>
