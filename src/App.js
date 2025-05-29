@@ -1,4 +1,5 @@
 // import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UserHome from './pages/UserHome'
@@ -11,10 +12,11 @@ import ContactUs from './pages/ContactUs';
 import ContactUsLoggedIn from './pages/ContactUsLoggedIn'
 import TermsAndConditions from './pages/TermsAndConditions';
 import Crypto from './pages/Crypto';
-import Stocks from './pages/Stocks'
-
+import Stocks from './pages/Stocks';
 
 function App() {
+  const [customHoldings, setCustomHoldings] = useState([]);
+  
   return (
     <BrowserRouter basename='/inf124'>
       <Routes>
@@ -35,11 +37,11 @@ function App() {
         {/* Terms And Conditions */}
         <Route path='/terms' element={<TermsAndConditions/>} />
         {/* User's Home page */}
-        <Route path='/userhome' element={<UserHome/>} />
+        <Route path='/userhome' element={<UserHome customHoldings={customHoldings} />} />
         {/* View Crypto */}
         <Route path='/crypto' element={<Crypto/>} />
         {/* View Stocks */}
-        <Route path='/stocks' element={<Stocks/>} />
+        <Route path='/stocks' element={<Stocks customHoldings={customHoldings} setCustomHoldings={setCustomHoldings} />} />
       </Routes>
     </BrowserRouter>
     
