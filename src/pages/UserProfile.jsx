@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import sampleProfilPic from '../assets/petr.png';
 import { Pencil } from "lucide-react";
-
+import HeaderBar from "../components/HeaderBar";
 
 export default function UserProfile() {
   const [profilePic, setProfilePic] = useState(null);
@@ -16,6 +16,8 @@ export default function UserProfile() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [isEditingFunding, setIsEditingFunding] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
 
   const handlePicChange = (e) => {
     const file = e.target.files[0];
@@ -27,6 +29,8 @@ export default function UserProfile() {
   };
 
   return (
+    <div>
+    <HeaderBar userName="Peter Anteater" />
     <div
       style={{
         display: "flex",
@@ -178,27 +182,11 @@ export default function UserProfile() {
         </button>
         </div>
 
-
-        {/* Funding */}
-        <div style={{ marginBottom: "1rem" }}>
-            <label style={{ fontWeight: "bold" }}>Funding:</label>
-            <div
-                style={{
-                marginTop: "0.25rem",
-                fontWeight: "bold",
-                fontSize: "1.2rem",
-                color: "green",
-                }}
-            >
-                ${funding.toFixed(2)}
-            </div>
-            </div>
-
-        {/* Add / Withdraw Buttons (below funding) */}
-        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
+        {/* Holding button */}
+        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0 rem" }}>
         <button
             style={{
-            padding: "0.35rem 0.75rem",
+            padding: "0.50rem 2rem",
             fontSize: "0.9rem",
             backgroundColor: "#4caf50",
             color: "#fff",
@@ -206,26 +194,47 @@ export default function UserProfile() {
             borderRadius: "4px",
             cursor: "pointer",
             }}
-            onClick={() => alert("Add Funds clicked")}
+            onClick={() => setShowModal(true)}
         >
-            Add Funds
-        </button>
-
-        <button
-            style={{
-            padding: "0.35rem 0.75rem",
-            fontSize: "0.9rem",
-            backgroundColor: "#f44336",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            }}
-            onClick={() => alert("Withdraw Funds clicked")}
-        >
-            Withdraw Funds
+            My Holding
         </button>
         </div>
+
+        {showModal && (
+            <div style={{
+                position: "fixed",
+                top: 0, left: 0,
+                width: "100%", height: "100%",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 1000,
+            }}>
+                <div style={{
+                background: "#fff",
+                padding: "2rem",
+                borderRadius: "8px",
+                minWidth: "300px",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.3)"
+                }}>
+                <h2>My Holdings</h2>
+                <p>This is the content of your holding popup.</p>
+                <button onClick={() => setShowModal(false)} style={{
+                    marginTop: "1rem",
+                    padding: "0.5rem 1rem",
+                    backgroundColor: "#f44336",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                }}>
+                    Close
+                </button>
+                </div>
+            </div>
+            )}
+
 
             
         {/* Update Profile Button */}
@@ -278,6 +287,7 @@ export default function UserProfile() {
           </ul>
         )}
       </div>
+    </div>
     </div>
   );
 }
