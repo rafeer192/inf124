@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import sampleProfilPic from '../assets/petr.png';
 import { Pencil } from "lucide-react";
-
+import HeaderBar from "../components/HeaderBar";
 
 export default function UserProfile() {
   const [profilePic, setProfilePic] = useState(null);
@@ -29,6 +29,8 @@ export default function UserProfile() {
   };
 
   return (
+    <div>
+    <HeaderBar userName="Peter Anteater" />
     <div
       style={{
         display: "flex",
@@ -285,6 +287,7 @@ export default function UserProfile() {
           </ul>
         )}
       </div>
+    </div>
     </div>
   );
 }
