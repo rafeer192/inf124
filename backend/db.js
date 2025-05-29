@@ -12,7 +12,7 @@ const pool = new Pool({
   ssl: false,
 });
 
-pool.connect()
+pool.connect() // test db connection
   .then(client => {
     console.log('✅ Successfully connected to PostgreSQL!');
     client.release();
