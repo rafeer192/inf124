@@ -6,7 +6,9 @@ import PortfolioChart from '../components/PortfolioChart';
 import BudgetChart from '../components/BudgetChart';
 import '../styles/UserHome.css';
 
-export default function UserHome() {
+import HoldingTile from './HoldingTile';
+
+export default function UserHome({ customHoldings }) {
   return (
     <div className="user-home-container">
       {/* for now, must change when backend is made  */}
@@ -15,6 +17,7 @@ export default function UserHome() {
         <div className="left-column">
           <TipTile />
           <NewsTile />
+          <HoldingTile customHoldings={customHoldings} />
         </div>
         <div className="right-column">
           <div className="chart-wrapper">
