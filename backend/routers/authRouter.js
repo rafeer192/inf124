@@ -8,7 +8,7 @@ router
     .route("/login")
     .get(async (req, res) => {
         if (req.session.user && req.session.user.email) {
-            res.status(200).json({ loggedIn: true, username: req.session.user.email });
+            res.status(200).json({ loggedIn: true, email: req.session.user.email });
         } 
         else {
             res.status(401).json({ loggedIn: false });
@@ -37,11 +37,11 @@ router
             }
             else { // not good login
                 res.status(401).json({ loggedIn: false, status: "Wrong email or password" });
-                console.log("not good");
+                console.log("not good login");
             }
         }  
         else {
-            console.log("not good");
+            console.log("not good no user");
             res.status(401).json({ loggedIn: false, status: "Wrong email or password" });
         }
     });
