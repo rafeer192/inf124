@@ -62,31 +62,40 @@ const LoginPage = () => {
             <h1> Login for financial services </h1>
 
             {/* EMAIL INPUT */}
-            <input 
-            type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder='Email*'
-            className='input-field'
-            required
-            />
-            <br/>         
+            <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input 
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email*"
+                className="input-field"
+                required
+                />
+            </div>
+
             {/* PASSWORD INPUT */}
-            <input
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder='Password'
-            className='input-field'
-            required
-            />
-            <p className='forgot-password'>
-                <Link to='/contact'>
-                    Forgot password?
-                </Link>
+            <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="input-field"
+                required
+                />
+            </div>
+
+            <p className="forgot-password">
+                <Link to="/contact">Forgot password?</Link>
             </p>
-            <button type='submit' className='login-button'>Login</button>
+
+            <button type="submit" className="login-button">Login</button>
         </form>
+
         <p>Dont have an account? <Link to='/register'>Sign up</Link> </p> 
         <div className='footer-links'> 
             <Link to='/contact'> Help</Link> 
