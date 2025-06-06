@@ -1,8 +1,10 @@
-import React, { useState } from 'react'; //useState automatically re renders changes
+import React, { useState, useContext } from 'react'; //useState automatically re renders changes
+import { AccountContext } from '../../components/AccountContext';
 import { Link, useNavigate } from 'react-router-dom';
-import LogoLink from '../components/LogoLink';
-import '../styles/RegisterPage.css'; 
+import LogoLink from '../../components/LogoLink';
+import '../../styles/RegisterPage.css'; 
 const RegisterPage = () => {
+    const { setUser } = useContext(AccountContext);
     const navigate = useNavigate(); 
     const [formData,setFormData] = useState({
         firstName: '',
@@ -35,12 +37,40 @@ const RegisterPage = () => {
         }));
       };
 
-      const handleSubmit = (event) => {
+      const handleSubmit = async (event) => {
         event.preventDefault();
         // will send data to server later on HERE
         console.log('Registering user: ', formData)
 
-        navigate('/userhome')
+        // add state and first/last name later
+        const temp = {
+            email: formData.email,
+            password: formData.password
+        };
+
+        try {
+            const response = await fetch ('http://localhost:4000/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include', // include cookies
+                body: JSON.stringify(temp),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.loggedIn) {
+                setUser(data.user);
+                navigate('/userhome');
+            }
+            else {
+                alert(data.status || 'Registration Failed');
+            }
+        }
+        catch (err) {
+            alert('Server error')
+        }
       }
     return (
         <div className='register-container'>

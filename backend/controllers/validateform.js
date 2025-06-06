@@ -1,4 +1,4 @@
-const formSchema = require('../../common');
+const { formSchema } = require('../../common');
 
 const validateForm = (req, res) => {
   const formData = req.body;
