@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import HeaderBar from "../components/HeaderBar";
+import { AccountContext } from "../components/AccountContext";
 
 export default function GoalCustomizer() {
   const [category, setCategory] = useState("Financial goal");
   const [customCategory, setCustomCategory] = useState("");
   const [subject, setSubject] = useState("");
-  const [user, setUser] = useState("");
+  const [customUser, setUser] = useState("");
   const [date, setDate] = useState("");
   const [details, setDetails] = useState("");
   const [priority, setPriority] = useState("Medium");
@@ -14,6 +15,10 @@ export default function GoalCustomizer() {
 
   const finalCategory = category === "custom" ? customCategory : category;
   const validGoals = goals.filter((g) => g.text && g.text.trim() !== "");
+
+  // personal info from db
+  const { user } = useContext(AccountContext);
+  const fullName = `${user?.firstName} ${user?.lastName}`;
 
   const handleSubmit = () => {
     if (!subject || !user || !date || !details) {
@@ -61,7 +66,7 @@ export default function GoalCustomizer() {
 
   return (
     <div>
-      <HeaderBar userName="Peter Anteater" />
+      <HeaderBar userName={fullName} />
       <div
         style={{
           display: "flex",
@@ -151,7 +156,7 @@ export default function GoalCustomizer() {
             <input
               type="text"
               placeholder="Who is this goal for?"
-              value={user}
+              value={customUser}
               onChange={(e) => setUser(e.target.value)}
               style={{
                 width: "100%",

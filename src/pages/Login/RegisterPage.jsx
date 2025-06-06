@@ -39,37 +39,40 @@ const RegisterPage = () => {
 
       const handleSubmit = async (event) => {
         event.preventDefault();
-        // will send data to server later on HERE
-        console.log('Registering user: ', formData)
 
-        // add state and first/last name later
-        const temp = {
+        // get user data: email, password, first & last name, state
+        // pass is not encrypted as it is an input
+        const userData = {
             email: formData.email,
-            password: formData.password
+            password: formData.password,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            state: formData.state
         };
 
         try {
-            const response = await fetch ('http://localhost:4000/auth/register', {
+            const response = await fetch ('http://localhost:4000/auth/register', { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include', // include cookies
-                body: JSON.stringify(temp),
+                body: JSON.stringify(userData),
             });
 
             const data = await response.json();
 
+            // if registration is good, send to /userhome
             if (response.ok && data.loggedIn) {
                 setUser(data.user);
                 navigate('/userhome');
             }
-            else {
+            else { // bad registration
                 alert(data.status || 'Registration Failed');
             }
         }
-        catch (err) {
-            alert('Server error')
+        catch (err) { // express server not connected, check "npm run dev"
+            alert('Server error' + err.message);
         }
       }
     return (

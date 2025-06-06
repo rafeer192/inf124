@@ -1,3 +1,16 @@
+npm run dev
+
+npm start
+
+psql -U postgres
+\c inf124
+
+to do
+connect react front end to back end
+make sure it can update db
+add state and email verification?
+email notifs?
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

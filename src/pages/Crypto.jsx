@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react"; 
 // import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar";
 import "../styles/Crypto.css";
+import { AccountContext } from '../components/AccountContext';
 
 const Crypto = () => {
     // const navigate = useNavigate();
@@ -11,10 +12,14 @@ const Crypto = () => {
     const [amount, setAmount] = useState("");
     const [note, setNote] = useState("");
 
+    // personal info from db
+    const { user } = useContext(AccountContext);
+    const fullName = `${user?.firstName} ${user?.lastName}`;
+
     return (
 
         <div>
-            <HeaderBar userName="Peter Anteater" /> 
+            <HeaderBar userName={fullName} />
             <div className="dashboard">
                 <input type="text" placeholder="Search Crypto Coins" className="search-bar" />
                 <div className="info">

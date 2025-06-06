@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer
 } from "recharts";
 import HeaderBar from "../components/HeaderBar";
 import "../styles/Crypto.css";
+import { AccountContext } from "../components/AccountContext";
 
 const API_KEY = "74a27c82d2a74e1b8544353c5b66ddd3";
 
@@ -19,6 +20,10 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   const [newAmount, setNewAmount] = useState("");
   const [newNote, setNewNote] = useState("");
   const [companySuggestions, setCompanySuggestions] = useState([]);
+  
+  // personal info from db
+  const { user } = useContext(AccountContext);
+  const fullName = `${user?.firstName} ${user?.lastName}`;
 
   const fetchCompanySuggestions = async (query) => {
     if (!query) {
@@ -113,7 +118,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
 
   return (
     <div>
-      <HeaderBar userName="Peter Anteater" />
+      <HeaderBar userName={fullName} />
       <div className="dashboard">
         <input
           type="text"

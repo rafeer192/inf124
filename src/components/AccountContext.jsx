@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const { createContext, useState, useEffect } = require("react");
 
@@ -6,7 +6,6 @@ export const AccountContext = createContext();
 
 const UserContext = ({ children }) => {
   const [user, setUser] = useState({ loggedIn: null });
-  const navigate = useNavigate();
   useEffect(() => {
     fetch("http://localhost:4000/auth/login", {
       credentials: "include",
@@ -28,7 +27,6 @@ const UserContext = ({ children }) => {
           return;
         }
         setUser({ ...data });
-        navigate("/");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
