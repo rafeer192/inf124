@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import HeaderBar from '../components/HeaderBar';
 import '../styles/PaymentUI.scss';
+import { AccountContext } from '../components/AccountContext';
 
 function PaymentUI() {
   // State Management
@@ -11,6 +12,10 @@ function PaymentUI() {
   const [sliderValue, setSliderValue] = useState(stockOwned ? (quantity / stockOwned) * 100 : 0);
   const initialPrice = 911.13; // replace with current stock price
   const [orderPrice, setOrderPrice] = useState(initialPrice);
+
+  // personal info from db
+  const { user } = useContext(AccountContext);
+  const fullName = `${user?.firstName} ${user?.lastName}`;
   
   const [orderDetails, setOrderDetails] = useState({
     cryptoBlock: {
@@ -89,7 +94,7 @@ function PaymentUI() {
 
   return (
     <div>
-      <HeaderBar userName="Peter Anteater" className="payment__header" /> 
+      <HeaderBar userName={fullName} className="payment__header" /> 
       <div className="payment__container">
         <main className="payment">
           <div className="payment__card">

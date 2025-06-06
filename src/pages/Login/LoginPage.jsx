@@ -1,44 +1,56 @@
 import React, { useState, useContext } from 'react'; //useState automatically re renders changes
 import { AccountContext } from '../../components/AccountContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import companyLogo from '../../assets/GreenWaveLogo.png';
 import LogoLink from '../../components/LogoLink';
 import '../../styles/LoginPage.css'; 
 
 const LoginPage = () => {
+    const navigate = useNavigate();
     const { setUser } = useContext(AccountContext);
     const [email,setEmail] = useState(''); // starts email and password as just an empty string
     const [password,setPassword] = useState('');
     const [error, setError] = useState(''); // error handling
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => { // function that handles when user clicks submit 
         e.preventDefault(); //prevents page from resetting
         setError(''); // resets error message
 
         try {
-            const response = await fetch('http://localhost:4000/auth/login', {
+            const response = await fetch('http://localhost:4000/auth/login', { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include', // include cookies
-                body: JSON.stringify({email, password}),
+                body: JSON.stringify({email, password}), // parse inputs
             });
 
             const data = await response.json();
 
             if (response.ok && data.loggedIn) {
-                setUser(data.user);
-                console.log('OK')
-                navigate('/userhome');
-            }
-            else {
+                // Update user state with all user data
+                await setUser({
+                    email: data.email,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    loggedIn: true // might delete?
+                }); 
+                
+                /*
+                    Logging in sends data to db correctly, and user can directly access private pages when inputting routes in link
+                    However, logging in sends the user to /userhome but it doesn't render
+                    Needs to refresh to render correctly
+                */
+                setTimeout(() => {
+                    navigate('/userhome');
+                }, 100);
+            } else { // bad login
                 setError(data.status || 'Login failed');
-                console.log('NOKAY')
             }
         }
-        catch (err) {
+        catch (err) { // check if express server is up "npm run dev"
             setError('Server Error');
         }
     };

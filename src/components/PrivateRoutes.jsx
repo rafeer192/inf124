@@ -1,16 +1,21 @@
 import { useContext } from "react";
 import { AccountContext } from "./AccountContext";
-
-const { Outlet, Navigate } = require("react-router");
-
-const useAuth = () => {
-  const { user } = useContext(AccountContext);
-  return user && user.loggedIn;
-};
+import { Outlet, Navigate, useLocation } from "react-router-dom";
 
 const PrivateRoutes = () => {
-  const isAuth = useAuth();
-  return isAuth ? <Outlet /> : <Navigate to="/" />;
+  const { user } = useContext(AccountContext);
+  const location = useLocation();
+
+  if (user && user.loggedIn === null) {
+    // Still loading auth state
+    return null;
+  }
+
+  return user?.loggedIn ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/" state={{ from: location }} replace />
+  );
 };
 
 export default PrivateRoutes;

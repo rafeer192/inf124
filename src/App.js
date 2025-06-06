@@ -1,8 +1,8 @@
 // import logo from './logo.svg';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import UserContext, { AccountContext } from "./components/AccountContext";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import UserContext from "./components/AccountContext";
 import UserHome from './pages/UserHome'
 import AboutUs from './pages/AboutUs'
 import LoginPage from './pages/Login/LoginPage';
@@ -52,7 +52,7 @@ function App() {
           </Route>
 
           {/* REDIRECT TO LANDING PAGE FOR OTHER ENDPOINTS */}
-          <Route path="*" element={<AboutUs />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </UserContext>
       

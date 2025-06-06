@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import HeaderBar from '../components/HeaderBar';
-
+import { AccountContext } from '../components/AccountContext';
 
 export default function ContactUs() {
+  // personal info from db
+  const { user } = useContext(AccountContext);
+  const fullName = `${user?.firstName} ${user?.lastName}`;
   return (
     <div>
-      <HeaderBar userName="Peter Anteater" /> 
+      <HeaderBar userName={fullName} />
       
       <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}>
         <h1 style={{ marginBottom: "2rem", textAlign: "center" }}>Contact Us</h1>

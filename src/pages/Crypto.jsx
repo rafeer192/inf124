@@ -1,139 +1,67 @@
-import React, { useState, useEffect } from "react";
-import {
-  LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer
-} from "recharts";
+import React, { useState, useContext } from "react"; 
+// import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar";
 import "../styles/Crypto.css";
-
-const API_KEY = "74a27c82d2a74e1b8544353c5b66ddd3";
+import { AccountContext } from '../components/AccountContext';
 
 const Crypto = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [customHoldings, setCustomHoldings] = useState([]);
-  const [symbol, setSymbol] = useState("BTC/USD");
-  const [amount, setAmount] = useState("");
-  const [note, setNote] = useState("");
-  const [searchInput, setSearchInput] = useState("");
-  const [cryptoData, setCryptoData] = useState([]);
-  const [metaData, setMetaData] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
+    // const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [customHoldings, setCustomHoldings] = useState([]);
+    const [symbol, setSymbol] = useState("");
+    const [amount, setAmount] = useState("");
+    const [note, setNote] = useState("");
 
-  useEffect(() => {
-    fetchCryptoData(symbol);
-  }, [symbol]);
+    // personal info from db
+    const { user } = useContext(AccountContext);
+    const fullName = `${user?.firstName} ${user?.lastName}`;
 
-  const fetchCryptoData = async (sym) => {
-    setErrorMessage("");
-    try {
-      const timeRes = await fetch(
-        `https://api.twelvedata.com/time_series?symbol=${sym}&interval=1day&outputsize=30&apikey=${API_KEY}`
-      );
-      const timeData = await timeRes.json();
+    return (
 
-      if (timeData.status === "error") {
-        setErrorMessage(timeData.message || "Error fetching crypto data.");
-        setCryptoData([]);
-        setMetaData(null);
-        return;
-      }
-
-      const chartData = timeData.values.reverse().map((entry) => ({
-        date: entry.datetime,
-        price: parseFloat(entry.close),
-      }));
-      setCryptoData(chartData);
-
-      const quoteRes = await fetch(
-        `https://api.twelvedata.com/quote?symbol=${sym}&apikey=${API_KEY}`
-      );
-      const quoteData = await quoteRes.json();
-
-      if (quoteData.status === "error" || !quoteData.name) {
-        setMetaData(null);
-      } else {
-        setMetaData({
-          name: quoteData.name,
-          exchange: quoteData.exchange,
-          currency: quoteData.currency,
-        });
-      }
-    } catch (error) {
-      setErrorMessage("Network error. Please try again later.");
-      console.error("Fetch error:", error);
-    }
-  };
-
-  const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      const formatted = searchInput.toUpperCase();
-      setSymbol(formatted.includes("/") ? formatted : `${formatted}/USD`);
-    }
-  };
-
-  return (
-    <div>
-      <HeaderBar userName="Peter Anteater" />
-      <div className="dashboard">
-        <input
-          type="text"
-          placeholder="Search Crypto Coins (e.g., BTC)"
-          className="search-bar"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          onKeyDown={handleSearch}
-        />
-        <div className="info">
-          <h2>{metaData ? `${metaData.name} (${symbol})` : symbol}</h2>
-          {cryptoData.length > 0 && (
-            <p>Current price per token: <strong>${cryptoData[cryptoData.length - 1].price.toFixed(2)}</strong></p>
-          )}
-          {metaData && (
-            <>
-              <p>Exchange: {metaData.exchange}</p>
-              <p>Currency: {metaData.currency}</p>
-            </>
-          )}
-        </div>
-        <div className="chart">
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={cryptoData}>
-              <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-              <YAxis domain={["auto", "auto"]} />
-              <Tooltip />
-              <CartesianGrid stroke="#ccc" />
-              <Line type="monotone" dataKey="price" stroke="#8884d8" dot={false} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="trending">
-          <h3>Trending Tokens</h3>
-          <ul>
-            <li>BTC</li><li>ETH</li><li>DOGE</li><li>SOL</li><li>DJT</li><li>MEL</li>
-          </ul>
-        </div>
-        <div className="holdings">
-          <h3>Your Current Holdings</h3>
-          {customHoldings.map((item, index) => (
-            <p key={index}>{item.symbol}: {item.amount} @ ${item.price?.toFixed(2) || "–"}</p>
-          ))}
-          <button
-            style={{
-              marginTop: "1rem",
-              padding: "0.5rem 1rem",
-              backgroundColor: "#4caf50",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-            onClick={() => setShowModal(true)}
-          >
-            My Crypto Holding
-          </button>
-        </div>
-      </div>
-
-      {showModal && (
+        <div>
+            <HeaderBar userName={fullName} />
+            <div className="dashboard">
+                <input type="text" placeholder="Search Crypto Coins" className="search-bar" />
+                <div className="info">
+                    <h2>$Ticker Symbol, Crypto Name</h2>
+                    <p>Current price per token: <strong>$0.00134</strong></p>
+                </div>
+                <div className="chart">
+                    {/* Placeholder for chart */}
+                    <div className="chart-placeholder">Price Trend Graph Coming Soon (when we have actual API data)</div>
+                    <div className="timeframe-options">
+                    <button>1D</button> <button>1W</button> <button>1M</button>
+                    <button>YTD</button> <button>1Y</button> <button>All</button>
+                    </div>
+                </div>
+                <div className="trending">
+                    <h3>Trending Tokens</h3>
+                    <ul>
+                    <li>BTC</li><li>ETH</li><li>DOGE</li><li>SOL</li><li>DJT</li><li>MEL</li>
+                    </ul>
+                </div>
+                <div className="holdings">
+                    <h3>Your Current Holdings</h3>
+                    <p>.02345 BTC ($1,245.37)</p>
+                    <p>1 ETH ($1,586.03)</p>
+                    <p>70000 DJT ($407.47)</p>
+                    <button
+                        style={{
+                        marginTop: "1rem",
+                        padding: "0.5rem 1rem",
+                        backgroundColor: "#4caf50",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        }}
+                        onClick={() => setShowModal(true)}
+                    >
+                        My Crypto Holding
+                    </button>
+                </div>
+            </div>
+        {showModal && (
         <div style={{
           position: "fixed",
           top: 0, left: 0,

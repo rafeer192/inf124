@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer
 } from "recharts";
 import HeaderBar from "../components/HeaderBar";
 import "../styles/Crypto.css";
+import { AccountContext } from "../components/AccountContext";
 
 const API_KEY = "74a27c82d2a74e1b8544353c5b66ddd3";
 
@@ -19,6 +20,10 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   const [newAmount, setNewAmount] = useState("");
   const [newNote, setNewNote] = useState("");
   const [companySuggestions, setCompanySuggestions] = useState([]);
+  
+  // personal info from db
+  const { user } = useContext(AccountContext);
+  const fullName = `${user?.firstName} ${user?.lastName}`;
 
   const fetchCompanySuggestions = async (query) => {
     if (!query) {
@@ -70,16 +75,16 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   const fetchStockData = async (symbol) => {
     setErrorMessage("");
     try {
-        // 1. Get time series data
+        // Get time series data
         const timeRes = await fetch(
         `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=1day&outputsize=30&apikey=${API_KEY}`
         );
         const timeData = await timeRes.json();
         if (timeData.status === "error") {
-        setErrorMessage(timeData.message || "Error fetching stock data.");
-        setStockData([]);
-        setMetaData(null);
-        return;
+            setErrorMessage(timeData.message || "Error fetching stock data.");
+            setStockData([]);
+            setMetaData(null);
+            return;
         }
         const chartData = timeData.values.reverse().map((entry) => ({
             date: entry.datetime,
@@ -87,7 +92,6 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
         }));
         setStockData(chartData);
 
-        // 2. Get market cap
         const quoteRes = await fetch(
             `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${API_KEY}`
         );
@@ -106,14 +110,15 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   };
 
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && searchInput.trim() !== '') {
       setStockSymbol(searchInput.toUpperCase());
+      setSearchInput("");
     }
   };
 
   return (
     <div>
-      <HeaderBar userName="Peter Anteater" />
+      <HeaderBar userName={fullName} />
       <div className="dashboard">
         <input
           type="text"
