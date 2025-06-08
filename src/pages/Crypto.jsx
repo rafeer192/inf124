@@ -4,6 +4,8 @@ import HeaderBar from "../components/HeaderBar";
 import "../styles/Crypto.css";
 import { AccountContext } from '../components/AccountContext';
 
+const API_KEY = "74a27c82d2a74e1b8544353c5b66ddd3";
+
 const Crypto = () => {
     // const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
