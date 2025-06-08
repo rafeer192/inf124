@@ -1,63 +1,98 @@
-// server.js or routes/stockOwnership.js
+// routes/stockownership.js
 const express = require("express");
 const router = express.Router();
-const pool = require("./db"); // your PostgreSQL pool connection
-const authenticate = require("./middleware/authenticate"); // your auth middleware
+const pool = require("../db.js");
+const authenticate = require("../../middleware/authenticate.js");
 
-// Middleware to get userId from auth (for example)
-router.use(authenticate);
-
-// Get all holdings for logged in user
-router.get("/", async (req, res) => {
+// GET all stocks owned by logged in user
+router.get("/", authenticate, async (req, res) => {
   try {
-    const userId = req.user.id;
     const result = await pool.query(
-      "SELECT ticker, amountowned, notes FROM stockOwnership WHERE userid = $1",
-      [userId]
+      "SELECT ticker, amountowned, notes FROM stockownership WHERE userid = $1",
+      [req.user.id]
     );
     res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
+  } catch (error) {
+    console.error("Error getting stockownership:", error);
+    res.status(500).json({ error: "Server error fetching stocks." });
   }
 });
 
-// Add a new holding or update existing holding for user
-router.post("/", async (req, res) => {
+// POST a new stock ownership record
+router.post("/", authenticate, async (req, res) => {
+  const { ticker, amountowned, notes } = req.body;
+  if (!ticker || amountowned == null) {
+    return res.status(400).json({ error: "Ticker and amount owned are required." });
+  }
   try {
-    const userId = req.user.id;
-    const { ticker, amountowned, notes } = req.body;
-
-    // Upsert logic: insert or update if exists
-    await pool.query(
-      `INSERT INTO stockOwnership(userid, ticker, amountowned, notes)
-       VALUES ($1, $2, $3, $4)
-       ON CONFLICT (userid, ticker)
-       DO UPDATE SET amountowned = EXCLUDED.amountowned, notes = EXCLUDED.notes`,
-      [userId, ticker, amountowned, notes]
+    const result = await pool.query(
+      `INSERT INTO stockownership(userid, ticker, amountowned, notes)
+       VALUES ($1, $2, $3, $4) RETURNING *`,
+      [req.user.id, ticker, amountowned, notes || null]
     );
-
-    res.status(201).send("Holding added/updated");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error inserting stockownership:", error);
+    res.status(500).json({ error: "Server error adding stock." });
   }
 });
 
-// Delete a holding
-router.delete("/:ticker", async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const ticker = req.params.ticker;
+// PUT update stock ownership amount or notes
+router.put("/:ticker", authenticate, async (req, res) => {
+  const { ticker } = req.params;
+  const { amountowned, notes } = req.body;
 
-    await pool.query(
-      "DELETE FROM stockOwnership WHERE userid = $1 AND ticker = $2",
-      [userId, ticker]
+  if (amountowned == null && notes == null) {
+    return res.status(400).json({ error: "Nothing to update." });
+  }
+
+  try {
+    // Build dynamic query parts
+    const fields = [];
+    const values = [];
+    let idx = 1;
+
+    if (amountowned != null) {
+      fields.push(`amountowned = $${idx++}`);
+      values.push(amountowned);
+    }
+    if (notes !== undefined) {
+      fields.push(`notes = $${idx++}`);
+      values.push(notes);
+    }
+
+    values.push(req.user.id);
+    values.push(ticker);
+
+    const query = `UPDATE stockownership SET ${fields.join(", ")} 
+                   WHERE userid = $${idx++} AND ticker = $${idx} RETURNING *`;
+
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Stock not found." });
+    }
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error("Error updating stockownership:", error);
+    res.status(500).json({ error: "Server error updating stock." });
+  }
+});
+
+// DELETE a stock ownership record
+router.delete("/:ticker", authenticate, async (req, res) => {
+  try {
+    const result = await pool.query(
+      "DELETE FROM stockownership WHERE userid = $1 AND ticker = $2 RETURNING *",
+      [req.user.id, req.params.ticker]
     );
-    res.send("Holding deleted");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Stock not found." });
+    }
+    res.json({ message: "Deleted successfully", deleted: result.rows[0] });
+  } catch (error) {
+    console.error("Error deleting stockownership:", error);
+    res.status(500).json({ error: "Server error deleting stock." });
   }
 });
 
