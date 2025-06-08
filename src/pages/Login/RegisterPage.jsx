@@ -51,7 +51,7 @@ const RegisterPage = () => {
         };
 
         try {
-            const response = await fetch ('http://localhost:4000/auth/register', { // fetch express server
+            const response = await fetch ("http://greenwave-env.eba-mmrhp4e6.us-east-1.elasticbeanstalk.com/auth/register", { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

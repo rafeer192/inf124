@@ -12,7 +12,7 @@ const server = require("http").createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
         credentials: "true",
     },
 });
@@ -20,14 +20,14 @@ const io = new Server(server, {
 app.use(helmet());
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
         credentials: true,
     })
 );
 
 app.use(express.json());
 app.use(session({ // create cookies so user doesn't have to relog when refreshing page
-    secret: process.env.COOKIE_SECRET,
+    secret: process.env.COOKIE_SECRET || "default_secret",
     credentials: true,
     name: "sid",
     saveUninitialized: false,
@@ -44,11 +44,14 @@ app.use("/auth", authRouter);
 app.use("/api/stocks", stockOwnershipRouter);
 
 
-io.on("connect", socket => {});
+io.on("connect", socket => {
+    console.log("Socket connected");
+});
 
 // EXPRESS SERVER
-server.listen(4000, () => {
-    console.log("Server is listening on port 4000");
+const port = process.env.PORT || 4000;
+server.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
 });
 
 module.exports = app

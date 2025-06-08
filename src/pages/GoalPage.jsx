@@ -140,7 +140,9 @@ export default function GoalCustomizer() {
             </div>
 
             {/* Form Fields */}
+            <label htmlFor='createGoal'> Goal </label>
             <input
+              id='createGoal'
               type="text"
               placeholder="What is your goal?"
               value={subject}
@@ -152,8 +154,9 @@ export default function GoalCustomizer() {
                 boxSizing: "border-box",
               }}
             />
-
+            <label htmlFor='reason'> Reason </label>
             <input
+              id='reason'
               type="text"
               placeholder="Who is this goal for?"
               value={customUser}
@@ -165,8 +168,9 @@ export default function GoalCustomizer() {
                 boxSizing: "border-box",
               }}
             />
-
+            <label htmlFor='date'> Date </label>
             <input
+              id='date'
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
@@ -177,8 +181,10 @@ export default function GoalCustomizer() {
                 boxSizing: "border-box",
               }}
             />
+            <label htmlFor='priorityLevel'>Priority</label>
 
             <select
+              id='priorityLevel'
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
               style={{
@@ -192,8 +198,9 @@ export default function GoalCustomizer() {
               <option value="Medium">Long-Term</option>
               <option value="Low">Casual</option>
             </select>
-
+            <label htmlFor='notes'> Notes </label>
             <textarea
+              id='notes'
               placeholder="Write your goal details here..."
               value={details}
               onChange={(e) => setDetails(e.target.value)}
