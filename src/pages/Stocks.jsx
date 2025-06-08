@@ -20,7 +20,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   const [newAmount, setNewAmount] = useState("");
   const [newNote, setNewNote] = useState("");
   const [companySuggestions, setCompanySuggestions] = useState([]);
-  
+
   // personal info from db
   const { user } = useContext(AccountContext);
   const fullName = `${user?.firstName} ${user?.lastName}`;
@@ -44,8 +44,8 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
           .filter(item =>
             item.symbol &&
             item.symbol.toUpperCase().startsWith(input) &&
-            item.exchange &&                         // ensures it’s from a known exchange
-            /^[A-Z]+$/.test(item.symbol)             // filters out weird/international formats
+            item.exchange &&
+            /^[A-Z]+$/.test(item.symbol)
           )
           .map(item => ({ symbol: item.symbol.toUpperCase() }));
   
@@ -67,7 +67,6 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
     }
   };
   
-  
   useEffect(() => {
     fetchStockData(stockSymbol);
   }, [stockSymbol]);
@@ -75,37 +74,35 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   const fetchStockData = async (symbol) => {
     setErrorMessage("");
     try {
-        // Get time series data
-        const timeRes = await fetch(
+      const timeRes = await fetch(
         `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=1day&outputsize=30&apikey=${API_KEY}`
-        );
-        const timeData = await timeRes.json();
-        if (timeData.status === "error") {
-            setErrorMessage(timeData.message || "Error fetching stock data.");
-            setStockData([]);
-            setMetaData(null);
-            return;
-        }
-        const chartData = timeData.values.reverse().map((entry) => ({
-            date: entry.datetime,
-            price: parseFloat(entry.close),
-        }));
-        setStockData(chartData);
+      );
+      const timeData = await timeRes.json();
+      if (timeData.status === "error") {
+        setErrorMessage(timeData.message || "Error fetching stock data.");
+        setStockData([]);
+        setMetaData(null);
+        return;
+      }
+      const chartData = timeData.values.reverse().map((entry) => ({
+        date: entry.datetime,
+        price: parseFloat(entry.close),
+      }));
+      setStockData(chartData);
 
-        const quoteRes = await fetch(
-            `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${API_KEY}`
-        );
-        const quoteData = await quoteRes.json();
-        console.log(quoteData);
+      const quoteRes = await fetch(
+        `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${API_KEY}`
+      );
+      const quoteData = await quoteRes.json();
 
-        setMetaData({
-            name: quoteData.name,
-            exchange: quoteData.exchange,
-            currency: quoteData.currency,
-        });
+      setMetaData({
+        name: quoteData.name,
+        exchange: quoteData.exchange,
+        currency: quoteData.currency,
+      });
     } catch (error) {
-        setErrorMessage("Network error. Please try again later.");
-        console.error("Fetch error:", error);
+      setErrorMessage("Network error. Please try again later.");
+      console.error("Fetch error:", error);
     }
   };
 
@@ -129,16 +126,17 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
           onKeyDown={handleSearch}
         />
         <div className="info">
-            <h2>{metaData ? `${metaData.name} (${stockSymbol})` : stockSymbol}</h2>
-            {stockData.length > 0 && (
+          <h2>{metaData ? `${metaData.name} (${stockSymbol})` : stockSymbol}</h2>
+          {stockData.length > 0 && (
             <p>Latest closing price: <strong>${stockData[stockData.length - 1].price.toFixed(2)}</strong></p>
-            )}
-            {metaData && (
+          )}
+          {metaData && (
             <>
-                <p>Exchange: {metaData.exchange}</p>
-                <p>Currency: {metaData.currency}</p>
+              <p>Exchange: {metaData.exchange}</p>
+              <p>Currency: {metaData.currency}</p>
             </>
-            )}
+          )}
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         </div>
         <div className="chart">
           <ResponsiveContainer width="100%" height={300}>
@@ -152,10 +150,6 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
           </ResponsiveContainer>
         </div>
         <div className="holdings">
-          <h3>Your Current Holdings</h3>
-          <p>100 AAPL</p>
-          <p>10 TSLA</p>
-          <p>5 QQQ</p>
           <button
             style={{
               marginTop: "1rem",
@@ -168,7 +162,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
             }}
             onClick={() => setShowModal(true)}
           >
-            My Holding
+            My Holdings
           </button>
         </div>
       </div>
@@ -194,90 +188,91 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
             display: "flex",
             flexDirection: "column",
             gap: "1rem",
+            maxHeight: "90vh",
+            overflowY: "auto",
           }}>
 
             <h2>Add or View Holding</h2>
 
-        <div style={{ position: "relative", width: "100%" }}>
-          <input
-            type="text"
-            placeholder="Enter stock symbol (e.g., AAPL)"
-            value={searchInput}
-            onChange={(e) => {
-              const val = e.target.value;
-              setSearchInput(val);
-              setNewSymbol(val);
-              fetchCompanySuggestions(val);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setStockSymbol(searchInput.toUpperCase());
-                setCompanySuggestions([]);
-              }
-            }}
-            style={{
-              padding: "0.5rem",
-              fontSize: "1rem",
-              borderRadius: "4px",
-              border: "1px solid #ccc",
-              width: "100%",          
-              boxSizing: "border-box",
-              display: "block",
-            }}
-          />
-
-          {companySuggestions.length > 0 && (
-            <ul
-              style={{
-                position: "absolute",
-                top: "100%",
-                left: 0,
-                width: "100%",
-                backgroundColor: "#fff",
-                border: "1px solid #ccc",
-                zIndex: 1000,
-                listStyle: "none",
-                margin: 0,
-                padding: 0,
-                maxHeight: "200px",
-                overflowY: "auto",
-              }}
-            >
-              {companySuggestions.map((item) => (
-                <li
-                  key={item.symbol}
-                  onClick={() => {
-                    setStockSymbol(item.symbol);
-                    setNewSymbol(item.symbol); 
-                    setSearchInput(item.symbol);
+            <div style={{ position: "relative", width: "100%" }}>
+              <input
+                type="text"
+                placeholder="Enter stock symbol (e.g., AAPL)"
+                value={searchInput}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSearchInput(val);
+                  setNewSymbol(val);
+                  fetchCompanySuggestions(val);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setStockSymbol(searchInput.toUpperCase());
                     setCompanySuggestions([]);
-                  }}
-                  
+                  }
+                }}
+                style={{
+                  padding: "0.5rem",
+                  fontSize: "1rem",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  width: "100%",          
+                  boxSizing: "border-box",
+                  display: "block",
+                }}
+              />
+
+              {companySuggestions.length > 0 && (
+                <ul
                   style={{
-                    padding: "0.5rem",
-                    cursor: "pointer",
-                    borderBottom: "1px solid #eee",
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    width: "100%",
+                    backgroundColor: "#fff",
+                    border: "1px solid #ccc",
+                    zIndex: 1000,
+                    listStyle: "none",
+                    margin: 0,
+                    padding: 0,
+                    maxHeight: "200px",
+                    overflowY: "auto",
                   }}
                 >
-                  {item.symbol}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                  {companySuggestions.map((item) => (
+                    <li
+                      key={item.symbol}
+                      onClick={() => {
+                        setStockSymbol(item.symbol);
+                        setNewSymbol(item.symbol); 
+                        setSearchInput(item.symbol);
+                        setCompanySuggestions([]);
+                      }}
+                      style={{
+                        padding: "0.5rem",
+                        cursor: "pointer",
+                        borderBottom: "1px solid #eee",
+                      }}
+                    >
+                      {item.symbol}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-        <input
-          type="number"
-          placeholder="Enter amount you own"
-          value={newAmount}
-          onChange={(e) => setNewAmount(e.target.value)}
-          style={{
-            padding: "0.5rem",
-            fontSize: "1rem",
-            borderRadius: "4px",
-            border: "1px solid #ccc",
-          }}
-        />
+            <input
+              type="number"
+              placeholder="Enter amount you own"
+              value={newAmount}
+              onChange={(e) => setNewAmount(e.target.value)}
+              style={{
+                padding: "0.5rem",
+                fontSize: "1rem",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+              }}
+            />
 
             <textarea
               placeholder="Notes or expectations (optional)"
@@ -313,7 +308,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
                       ...customHoldings,
                       {
                         symbol,
-                        amount: newAmount,
+                        amount: parseFloat(newAmount),
                         note: newNote,
                         price: parseFloat(quoteData.close),
                       },
@@ -322,93 +317,195 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
                     setNewSymbol("");
                     setNewAmount("");
                     setNewNote("");
+                    setSearchInput("");
                   } catch (error) {
                     alert("Error fetching stock data. Please try again.");
                     console.error(error);
                   }
+                } else {
+                  alert("Please enter both a symbol and amount.");
                 }
               }}
 
               style={{
                 marginTop: "0.5rem",
                 padding: "0.5rem 1rem",
-                backgroundColor: "#4caf50",
+                backgroundColor: "#2196f3",
                 color: "#fff",
                 border: "none",
                 borderRadius: "6px",
                 cursor: "pointer",
-                fontSize: "1rem",
-                alignSelf: "flex-end",
+                fontWeight: "bold",
               }}
             >
-              Submit
+              Add Holding
             </button>
 
-            <div style={{ marginTop: "0rem", width: "100%" }}>
-              <h4>Your Current Holdings:</h4>
+            <h3>Your Current Holdings</h3>
+            {customHoldings.length === 0 && <p>No holdings added yet.</p>}
 
-              {/* Column headers */}
+            {/* Header row */}
+            {customHoldings.length > 0 && (
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
+                  padding: "0.5rem 0",
                   fontWeight: "bold",
                   borderBottom: "2px solid #ccc",
-                  paddingBottom: "0.5rem",
-                  marginBottom: "0.5rem",
+                  fontSize: "1rem",
+                  gap: "0.5rem",
                 }}
               >
-                <span style={{ width: "33%" }}>Company</span>
-                <span style={{ width: "33%", textAlign: "center" }}>Last Price</span>
-                <span style={{ width: "33%", textAlign: "right" }}>Your Holding</span>
+                <div style={{ width: "25%" }}>Stock Symbol</div>
+                <div style={{ width: "25%", textAlign: "center" }}>Shares Owned</div>
+                <div style={{ width: "25%", textAlign: "right" }}>Last Holding Value</div>
+                <div style={{ width: "25%", textAlign: "right" }}>Actions</div>
               </div>
+            )}
 
-              {/* Scrollable list container */}
-              <div style={{ maxHeight: "200px", overflowY: "auto" }}>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                  {customHoldings.map((item, index) => (
-                    <li
-                      key={index}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        padding: "0.5rem 0",
-                        borderBottom: "1px solid #eee",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      <span style={{ width: "33%" }}>{item.symbol}</span>
-                      <span style={{ width: "33%", textAlign: "center" }}>
-                        {item.price ? `$${item.price.toFixed(2)}` : "–"}
-                      </span>
-                      <span style={{ width: "33%", textAlign: "right" }}>
-                        ${parseFloat(item.amount).toFixed(2)}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {customHoldings.map((item, index) => {
+                // Use local state for editing amount per item
+                // But inside map we can't call hooks conditionally, so we will lift this logic outside
 
-            
-            <button onClick={() => setShowModal(false)} style={{
-              marginTop: "1rem",
-              padding: "0.5rem 1rem",
-              backgroundColor: "#f44336",
-              color: "#fff",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              alignSelf: "flex-end"
-            }}>
+                // Instead, we'll create a controlled component for each item below:
+                return (
+                  <EditableHoldingItem
+                    key={index}
+                    item={item}
+                    index={index}
+                    customHoldings={customHoldings}
+                    setCustomHoldings={setCustomHoldings}
+                  />
+                );
+              })}
+            </ul>
+
+            <button
+              onClick={() => setShowModal(false)}
+              style={{
+                marginTop: "1rem",
+                padding: "0.5rem 1rem",
+                backgroundColor: "#e53935",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+            >
               Close
             </button>
           </div>
         </div>
       )}
-
     </div>
   );
 };
+
+function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings }) {
+  const [editedAmount, setEditedAmount] = useState(item.amount.toString());
+  const [isEdited, setIsEdited] = useState(false);
+
+  useEffect(() => {
+    // Reset local edited state if external holdings change for this item
+    setEditedAmount(item.amount.toString());
+    setIsEdited(false);
+  }, [item.amount]);
+
+  return (
+    <li
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "0.5rem 0",
+        borderBottom: "1px solid #eee",
+        fontSize: "1rem",
+        gap: "0.5rem",
+      }}
+    >
+      <span style={{ width: "25%" }}>{item.symbol}</span>
+
+      <input
+        type="number"
+        value={editedAmount}
+        onChange={(e) => {
+          const val = e.target.value;
+          setEditedAmount(val);
+          setIsEdited(val !== item.amount.toString());
+        }}
+        style={{
+          width: "25%",
+          textAlign: "center",
+          padding: "0.3rem",
+          fontSize: "1rem",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+        }}
+      />
+
+      <span style={{ width: "25%", textAlign: "right" }}>
+        {item.price
+          ? `$${(parseFloat(editedAmount || "0") * item.price).toFixed(2)}`
+          : "–"}
+      </span>
+
+      <div
+        style={{
+          width: "25%",
+          textAlign: "right",
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: "0.5rem",
+        }}
+      >
+        {isEdited && (
+          <button
+            onClick={() => {
+              if (!isNaN(parseFloat(editedAmount)) && parseFloat(editedAmount) >= 0) {
+                const updated = [...customHoldings];
+                updated[index].amount = parseFloat(editedAmount);
+                setCustomHoldings(updated);
+                setIsEdited(false);
+              } else {
+                alert("Please enter a valid non-negative number.");
+              }
+            }}
+            style={{
+              backgroundColor: "#2196f3",
+              color: "#fff",
+              border: "none",
+              padding: "0.3rem 0.6rem",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+            }}
+          >
+            Update
+          </button>
+        )}
+
+        <button
+          onClick={() => {
+            const updated = customHoldings.filter((_, i) => i !== index);
+            setCustomHoldings(updated);
+          }}
+          style={{
+            backgroundColor: "#e53935",
+            color: "#fff",
+            border: "none",
+            padding: "0.3rem 0.6rem",
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontSize: "0.9rem",
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </li>
+  );
+}
 
 export default Stocks;
