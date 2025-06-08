@@ -25,6 +25,8 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   const { user } = useContext(AccountContext);
   const fullName = `${user?.firstName} ${user?.lastName}`;
 
+
+
   const fetchCompanySuggestions = async (query) => {
     if (!query) {
       setCompanySuggestions([]);
@@ -70,6 +72,36 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   useEffect(() => {
     fetchStockData(stockSymbol);
   }, [stockSymbol]);
+  useEffect(() => {
+    const fetchUserHoldings = async () => {
+      if (user && user.loggedIn && user.id) {
+        try {
+          const response = await fetch("http://localhost:4000/api/stocks", {
+            credentials: "include", // Essential for sending session cookies
+          });
+
+        if (response.ok) {
+          const data = await response.json(); // Array of { ticker, amountowned, notes }
+          setCustomHoldings(data);
+        } else if (response.status === 401) {
+          console.log("Not authenticated to fetch holdings. Please log in.");
+          setCustomHoldings([]); // Clear any old holdings if session expired
+        } else {
+          const errorText = await response.text(); // Get more specific error from backend
+          console.error("Failed to fetch user holdings:", response.status, errorText);
+          setErrorMessage(`Failed to load your holdings: ${errorText}`);
+        }
+      } catch (error) {
+        console.error("Network error fetching holdings:", error);
+        setErrorMessage("Network error fetching your holdings.");
+      }
+      } else {
+      // If user is not logged in, clear holdings
+      setCustomHoldings([]);
+      }
+    };
+    fetchUserHoldings();
+  }, [user, user.loggedIn, user.id]); // Dependencies: re-run when user context or login status changes
 
   const fetchStockData = async (symbol) => {
     setErrorMessage("");
@@ -117,7 +149,9 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
     <div>
       <HeaderBar userName={fullName} />
       <div className="dashboard">
+        <label htmlFor='searchStock'>Search Stock</label>
         <input
+          id='searchStock'
           type="text"
           placeholder="Search Stocks (e.g., AAPL)"
           className="search-bar"
@@ -288,45 +322,72 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
               }}
             />
 
-            <button
-              onClick={async () => {
-                if (newSymbol && newAmount) {
-                  const symbol = newSymbol.toUpperCase();
-              
-                  try {
-                    const quoteRes = await fetch(
-                      `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${API_KEY}`
-                    );
-                    const quoteData = await quoteRes.json();
-              
-                    if (!quoteData.close || quoteData.status === "error") {
-                      alert("Failed to fetch price for symbol: " + symbol);
-                      return;
-                    }
-              
+            <button onClick={async () => {
+              if (newSymbol && newAmount) {
+                const symbol = newSymbol.toUpperCase();
+                const amount = parseFloat(newAmount);
+
+                // Basic validation
+                if (isNaN(amount) || amount <= 0) {
+                  alert("Please enter a valid positive amount.");
+                  return;
+                }
+
+                try {
+                  // 1. Fetch current price from Twelve Data API (for frontend display)
+                  const quoteRes = await fetch(
+                    `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${API_KEY}`
+                  );
+                  const quoteData = await quoteRes.json();
+
+                  if (!quoteData.close || quoteData.status === "error") {
+                    alert("Failed to fetch current price for symbol: " + symbol + ". Please check the symbol.");
+                    return;
+                  }
+                  const currentPrice = parseFloat(quoteData.close);
+
+                  // 2. Send data to your backend API
+                  const response = await fetch("http://localhost:4000/api/stocks", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      ticker: symbol,
+                      amountowned: amount,
+                      notes: newNote,
+                    }),
+                    credentials: "include", // Crucial for sending session cookies
+                  });
+
+                  if (response.ok) {
+                    const addedHolding = await response.json(); // The backend returns the new record
                     setCustomHoldings([
                       ...customHoldings,
                       {
-                        symbol,
-                        amount: parseFloat(newAmount),
-                        note: newNote,
-                        price: parseFloat(quoteData.close),
+                        symbol: addedHolding.ticker,
+                        amount: addedHolding.amountowned,
+                        note: addedHolding.notes, // Ensure notes are also carried over if the backend returns them
                       },
                     ]);
-              
+                    // Clear input fields after successful addition
                     setNewSymbol("");
                     setNewAmount("");
                     setNewNote("");
                     setSearchInput("");
-                  } catch (error) {
-                    alert("Error fetching stock data. Please try again.");
-                    console.error(error);
+                    setCompanySuggestions([]); // Clear suggestions
+                  } else {
+                    const errorData = await response.json();
+                    alert(`Failed to add holding: ${errorData.error || response.statusText}`);
                   }
-                } else {
-                  alert("Please enter both a symbol and amount.");
+                } catch (error) {
+                  alert("Network or server error. Please try again.");
+                  console.error("Error adding holding:", error);
                 }
-              }}
-
+              } else {
+                alert("Please enter both a symbol and amount.");
+              }
+            }}
               style={{
                 marginTop: "0.5rem",
                 padding: "0.5rem 1rem",
@@ -462,16 +523,50 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
       >
         {isEdited && (
           <button
-            onClick={() => {
-              if (!isNaN(parseFloat(editedAmount)) && parseFloat(editedAmount) >= 0) {
-                const updated = [...customHoldings];
-                updated[index].amount = parseFloat(editedAmount);
-                setCustomHoldings(updated);
-                setIsEdited(false);
-              } else {
-                alert("Please enter a valid non-negative number.");
+          onClick={async () => {
+            if (!isNaN(parseFloat(editedAmount)) && parseFloat(editedAmount) >= 0) {
+              const updatedAmount = parseFloat(editedAmount);
+
+              // Prevent unnecessary API call if amount hasn't changed
+              if (updatedAmount === item.amount) {
+                  setIsEdited(false); // Reset edit state if no change
+                  return;
               }
-            }}
+
+              try {
+                const response = await fetch(`http://localhost:4000/api/stocks/${item.symbol}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    amountowned: updatedAmount,
+                    // If you wanted to allow notes editing, you'd add: notes: newNoteForThisItem
+                  }),
+                  credentials: "include", // Crucial for session cookies
+                });
+
+                if (response.ok) {
+                  const updatedRecord = await response.json(); // Backend returns updated record
+                  const updatedHoldings = customHoldings.map((h, i) =>
+                    i === index
+                      ? { ...h, amount: updatedRecord.amountowned, notes: updatedRecord.notes } // Update all fields from backend
+                      : h
+                  );
+                  setCustomHoldings(updatedHoldings);
+                  setIsEdited(false); // Reset edit state
+                } else {
+                  const errorData = await response.json();
+                  alert(`Failed to update holding: ${errorData.error || response.statusText}`);
+                }
+              } catch (error) {
+                alert("Network or server error. Please try again.");
+                console.error("Error updating holding:", error);
+              }
+            } else {
+              alert("Please enter a valid non-negative number.");
+            }
+          }}
             style={{
               backgroundColor: "#2196f3",
               color: "#fff",
@@ -487,19 +582,30 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
         )}
 
         <button
-          onClick={() => {
-            const updated = customHoldings.filter((_, i) => i !== index);
-            setCustomHoldings(updated);
-          }}
-          style={{
-            backgroundColor: "#e53935",
-            color: "#fff",
-            border: "none",
-            padding: "0.3rem 0.6rem",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "0.9rem",
-          }}
+        onClick={async () => {
+          if (window.confirm(`Are you sure you want to delete ${item.symbol}?`)) { // Add confirmation
+            try {
+              const response = await fetch(`http://localhost:4000/api/stocks/${item.symbol}`, {
+                method: "DELETE",
+                credentials: "include", // Crucial for session cookies
+              });
+
+              if (response.ok) {
+                // Backend returns a success message and the deleted item
+                // You can update local state by filtering it out
+                const updated = customHoldings.filter((_, i) => i !== index);
+                setCustomHoldings(updated);
+                alert(`${item.symbol} deleted successfully.`);
+              } else {
+                const errorData = await response.json();
+                alert(`Failed to delete holding: ${errorData.error || response.statusText}`);
+              }
+            } catch (error) {
+              alert("Network or server error. Please try again.");
+              console.error("Error deleting holding:", error);
+            }
+          }
+        }}
         >
           Delete
         </button>
