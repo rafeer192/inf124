@@ -120,7 +120,9 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
     <div>
       <HeaderBar userName={fullName} />
       <div className="dashboard">
+        <label htmlFor='searchStock'>Search Stock</label>
         <input
+          id='searchStock'
           type="text"
           placeholder="Search Stocks (e.g., AAPL)"
           className="search-bar"
