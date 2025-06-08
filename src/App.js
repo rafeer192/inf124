@@ -20,7 +20,7 @@ function App() {
   const [customHoldings, setCustomHoldings] = useState([]);
   
   return (
-    <BrowserRouter basename='/inf124'>
+    <BrowserRouter>
       <UserContext>
         <Routes>
           {/* NO ACCOUNT NEEDED */}

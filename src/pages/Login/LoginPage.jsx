@@ -18,7 +18,7 @@ const LoginPage = () => {
         setError(''); // resets error message
 
         try {
-            const response = await fetch('http://localhost:4000/auth/login', { // fetch express server
+            const response = await fetch("http://greenwave-env.eba-mmrhp4e6.us-east-1.elasticbeanstalk.com/auth/login", { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
