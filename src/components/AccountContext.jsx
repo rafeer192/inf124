@@ -7,7 +7,7 @@ export const AccountContext = createContext();
 const UserContext = ({ children }) => {
   const [user, setUser] = useState({ loggedIn: null });
   useEffect(() => {
-    fetch("http://localhost:4000/auth/login", {
+    fetch("http://greenwave-env.eba-mmrhp4e6.us-east-1.elasticbeanstalk.com/auth/login", {
       credentials: "include",
     })
       .catch(err => {

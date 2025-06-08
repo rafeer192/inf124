@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import sampleProfilPic from '../assets/petr.png';
-import { Pencil } from "lucide-react";
 import HeaderBar from "../components/HeaderBar";
 import { AccountContext } from '../components/AccountContext';
 
@@ -14,7 +13,6 @@ export default function UserProfile() {
   const [profilePic, setProfilePic] = useState(null);
   const [name, setName] = useState(fullName);
   const [contact, setContact] = useState(email);
-  const [funding, setFunding] = useState(2450.75);
   const [transactions, setTransactions] = useState([
     { date: "2025-05-01", detail: "Added $500", amount: 500 },
     { date: "2025-04-20", detail: "Spent on Goal A", amount: -150 },
