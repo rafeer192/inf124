@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const authRouter = require("./routers/authRouter");
 const session = require("express-session");
+const stockOwnershipRouter = require("./routers/stockOwnership.js");
 const app = express();
 const server = require("http").createServer(app);
 
@@ -40,6 +41,8 @@ app.use(session({ // create cookies so user doesn't have to relog when refreshin
 );
 
 app.use("/auth", authRouter);
+app.use("/api/stocks", stockOwnershipRouter);
+
 
 io.on("connect", socket => {});
 
