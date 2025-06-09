@@ -17,4 +17,12 @@ CREATE TABLE stockOwnership (
     PRIMARY KEY (userid, ticker),
     FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE portfolio_assets (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  asset VARCHAR(50) NOT NULL,
+  percent NUMERIC NOT NULL CHECK (percent >= 0 AND percent <= 100),
+  UNIQUE (user_id, asset)
+);
 INSERT INTO users(email, passhash) values ($1,$2);
