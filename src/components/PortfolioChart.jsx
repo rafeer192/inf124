@@ -36,13 +36,17 @@ export default function PortfolioChart() {
   }, []);
 
   const updatePortfolio = (newPortfolio) => {
-    setPortfolio(newPortfolio);
-    console.log(newPortfolio);
+    const sanitizedPortfolio = newPortfolio.map((item) => ({
+      asset: item.asset,
+      percent: Number(item.percent),
+    }));
+    setPortfolio(sanitizedPortfolio);
+    console.log(sanitizedPortfolio);
     fetch('http://localhost:4000/api/portfolio', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({portfolio: newPortfolio}),
+      body: JSON.stringify({portfolio: sanitizedPortfolio}),
     }).catch((err) => console.error('Failed to save portfolio:', err));
   };
 

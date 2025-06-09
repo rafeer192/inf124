@@ -25,4 +25,12 @@ CREATE TABLE portfolio_assets (
   percent NUMERIC NOT NULL CHECK (percent >= 0 AND percent <= 100),
   UNIQUE (user_id, asset)
 );
+
+CREATE TABLE budget_tracking (
+    id SERIAL PRIMARY KEY, 
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    category VARCHAR(50) NOT NULL,
+    amount NUMERIC NOT NULL, 
+    UNIQUE (user_id, category)
+);
 INSERT INTO users(email, passhash) values ($1,$2);

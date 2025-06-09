@@ -8,6 +8,7 @@ const authRouter = require("./routers/authRouter");
 const session = require("express-session");
 const stockOwnershipRouter = require("./routers/stockOwnership.js");
 const portfolioRouter = require("./routers/portfolioRouter.js");
+const budgetRouter = require("./routers/budgetRouter.js")
 const app = express();
 const server = require("http").createServer(app);
 
@@ -47,6 +48,7 @@ app.use(session({ // create cookies so user doesn't have to relog when refreshin
 app.use("/auth", authRouter);
 app.use("/api/stocks", stockOwnershipRouter);
 app.use("/api/portfolio", portfolioRouter); 
+app.use("/api/budget", budgetRouter);
 
 
 io.on("connect", socket => {
