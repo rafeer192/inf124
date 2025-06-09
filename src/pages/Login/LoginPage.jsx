@@ -1,59 +1,56 @@
-import React, { useState, useContext } from 'react'; //useState automatically re renders changes
+import React, { useState, useContext, useEffect } from 'react';
 import { AccountContext } from '../../components/AccountContext';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-import companyLogo from '../../assets/GreenWaveLogo.png';
 import LogoLink from '../../components/LogoLink';
 import '../../styles/LoginPage.css'; 
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { setUser } = useContext(AccountContext);
-    const [email,setEmail] = useState(''); // starts email and password as just an empty string
-    const [password,setPassword] = useState('');
-    const [error, setError] = useState(''); // error handling
+    const { setUser, user } = useContext(AccountContext);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const handleSubmit = async (e) => { // function that handles when user clicks submit 
-        e.preventDefault(); //prevents page from resetting
-        setError(''); // resets error message
+    useEffect(() => {
+        if (user?.loggedIn) {
+            navigate('/userhome');
+        }
+    }, [user, navigate]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
 
         try {
-            const response = await fetch("http://greenwave-env.eba-mmrhp4e6.us-east-1.elasticbeanstalk.com/auth/login", { // fetch express server
+            const response = await fetch('http://localhost:4000/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                credentials: 'include', // include cookies
-                body: JSON.stringify({email, password}), // parse inputs
+                credentials: 'include',
+                body: JSON.stringify({ email, password }),
             });
 
             const data = await response.json();
 
             if (response.ok && data.loggedIn) {
-                // Update user state with all user data
-                await setUser({
+                setUser({
                     email: data.email,
                     firstName: data.firstName,
                     lastName: data.lastName,
-                    loggedIn: true // might delete?
-                }); 
-                
-                /*
-                    Logging in sends data to db correctly, and user can directly access private pages when inputting routes in link
-                    However, logging in sends the user to /userhome but it doesn't render
-                    Needs to refresh to render correctly
-                */
-                setTimeout(() => {
-                    navigate('/userhome');
-                }, 100);
-            } else { // bad login
+                    loggedIn: true
+                });
+                // Don't call navigate here
+            } else {
                 setError(data.status || 'Login failed');
             }
-        }
-        catch (err) { // check if express server is up "npm run dev"
+        } catch (err) {
             setError('Server Error');
         }
     };
+
+
 
     return (
     <div className='login-container'>
