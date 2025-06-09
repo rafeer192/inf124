@@ -20,7 +20,6 @@ function App() {
   const [customHoldings, setCustomHoldings] = useState([]);
   
   return (
-    <BrowserRouter>
       <UserContext>
         <Routes>
           {/* NO ACCOUNT NEEDED */}
@@ -54,10 +53,7 @@ function App() {
           {/* REDIRECT TO LANDING PAGE FOR OTHER ENDPOINTS */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </UserContext>
-      
-    </BrowserRouter>
-    
+      </UserContext>    
   );
 }
 
