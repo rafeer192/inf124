@@ -38,10 +38,10 @@ export default function HoldingTile({ customHoldings = [] }) {
                   fontSize: "1rem",
                 }}
               >
-                <span style={{ width: "33%" }}>{item.symbol}</span>
+                <span style={{ width: "33%" }}>{item.ticker}</span>
 
                 <span style={{ width: "33%", textAlign: "right" }}>
-                  {parseFloat(item.amount).toFixed(2)}
+                  {parseFloat(item.amountowned).toFixed(2)}
                 </span>
               </li>
             ))}

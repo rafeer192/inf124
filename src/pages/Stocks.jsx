@@ -72,33 +72,6 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   useEffect(() => {
     fetchStockData(stockSymbol);
   }, [stockSymbol]);
-  useEffect(() => {
-    const fetchUserHoldings = async () => {
-      if (showModal && user && user.loggedIn && user.id) {
-        try {
-          const response = await fetch("http://localhost:4000/api/stocks", {
-            credentials: "include", // Essential for sending session cookies
-          });
-
-        if (response.ok) {
-          const data = await response.json(); // Array of { ticker, amountowned, notes }
-          setCustomHoldings(data);
-        } else if (response.status === 401) {
-          console.log("Not authenticated to fetch holdings. Please log in.");
-          setCustomHoldings([]); // Clear any old holdings if session expired
-        } else {
-          const errorText = await response.text(); // Get more specific error from backend
-          console.error("Failed to fetch user holdings:", response.status, errorText);
-          setErrorMessage(`Failed to load your holdings: ${errorText}`);
-        }
-        } catch (error) {
-          console.error("Network error fetching holdings:", error);
-          setErrorMessage("Network error fetching your holdings.");
-        }
-      } 
-    };
-    fetchUserHoldings();
-  }, [user, user.loggedIn, user.id]); // Dependencies: re-run when user context or login status changes
 
   const fetchStockData = async (symbol) => {
     setErrorMessage("");
@@ -141,6 +114,30 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
       setSearchInput("");
     }
   };
+  const showUserHoldings = async() => {
+      try {
+        const response = await fetch("http://localhost:4000/api/stocks", {
+        credentials: "include", // Essential for sending session cookies
+      });
+      console.log(response);
+      if (response.ok) {
+        const data = await response.json(); // Array of { ticker, amountowned, notes }
+        console.log(data);
+        setCustomHoldings(data);
+        setShowModal(true);
+      } else if (response.status === 401) {
+        console.log("Not authenticated to fetch holdings. Please log in.");
+        setCustomHoldings([]); // Clear any old holdings if session expired
+      } else {
+        const errorText = await response.text(); // Get more specific error from backend
+        console.error("Failed to fetch user holdings:", response.status, errorText);
+        setErrorMessage(`Failed to load your holdings: ${errorText}`);
+      }
+      } catch (error) {
+        console.error("Network error fetching holdings:", error);
+        setErrorMessage("Network error fetching your holdings.");
+      }
+  }
 
   return (
     <div>
@@ -191,7 +188,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
               borderRadius: "6px",
               cursor: "pointer",
             }}
-            onClick={() => setShowModal(true)}
+            onClick={showUserHoldings}
           >
             My Holdings
           </button>
@@ -343,7 +340,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
                   }
                   const currentPrice = parseFloat(quoteData.close);
 
-                  // 2. Send data to your backend API
+                  // 2. Send data to backend API
                   const response = await fetch("http://localhost:4000/api/stocks", {
                     method: "POST",
                     headers: {
@@ -458,14 +455,15 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
 };
 
 function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings }) {
-  const [editedAmount, setEditedAmount] = useState(item.amount.toString());
+  const [editedAmount, setEditedAmount] = useState(item.amountowned.toString());
   const [isEdited, setIsEdited] = useState(false);
 
   useEffect(() => {
     // Reset local edited state if external holdings change for this item
-    setEditedAmount(item.amount.toString());
+    console.log(item);
+    setEditedAmount(item.amountowned.toString());
     setIsEdited(false);
-  }, [item.amount]);
+  }, [item.amountowned]);
 
   return (
     <li
@@ -479,7 +477,7 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
         gap: "0.5rem",
       }}
     >
-      <span style={{ width: "25%" }}>{item.symbol}</span>
+      <span style={{ width: "25%" }}>{item.ticker}</span>
 
       <input
         type="number"
@@ -487,7 +485,7 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
         onChange={(e) => {
           const val = e.target.value;
           setEditedAmount(val);
-          setIsEdited(val !== item.amount.toString());
+          setIsEdited(val !== item.amountowned.toString());
         }}
         style={{
           width: "25%",
@@ -517,13 +515,13 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
               const updatedAmount = parseFloat(editedAmount);
 
               // Prevent unnecessary API call if amount hasn't changed
-              if (updatedAmount === item.amount) {
+              if (updatedAmount === item.amountowned) {
                   setIsEdited(false); // Reset edit state if no change
                   return;
               }
 
               try {
-                const response = await fetch(`http://localhost:4000/api/stocks/${item.symbol}`, {
+                const response = await fetch(`http://localhost:4000/api/stocks/${item.ticker}`, {
                   method: "PUT",
                   headers: {
                     "Content-Type": "application/json",
@@ -539,7 +537,7 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
                   const updatedRecord = await response.json(); // Backend returns updated record
                   const updatedHoldings = customHoldings.map((h, i) =>
                     i === index
-                      ? { ...h, amount: updatedRecord.amountowned, notes: updatedRecord.notes } // Update all fields from backend
+                      ? { ...h, amountowned: updatedRecord.amountowned, notes: updatedRecord.notes } // Update all fields from backend
                       : h
                   );
                   setCustomHoldings(updatedHoldings);
@@ -572,9 +570,9 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
 
         <button
         onClick={async () => {
-          if (window.confirm(`Are you sure you want to delete ${item.symbol}?`)) { // Add confirmation
+          if (window.confirm(`Are you sure you want to delete ${item.ticker}?`)) { // Add confirmation
             try {
-              const response = await fetch(`http://localhost:4000/api/stocks/${item.symbol}`, {
+              const response = await fetch(`http://localhost:4000/api/stocks/${item.ticker}`, {
                 method: "DELETE",
                 credentials: "include", // Crucial for session cookies
               });
@@ -584,7 +582,7 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
                 // You can update local state by filtering it out
                 const updated = customHoldings.filter((_, i) => i !== index);
                 setCustomHoldings(updated);
-                alert(`${item.symbol} deleted successfully.`);
+                alert(`${item.ticker} deleted successfully.`);
               } else {
                 const errorData = await response.json();
                 alert(`Failed to delete holding: ${errorData.error || response.statusText}`);
