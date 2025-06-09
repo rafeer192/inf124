@@ -145,29 +145,6 @@ const Crypto = () => {
             <li>MEL</li>
           </ul>
         </div>
-        <div className="holdings">
-          <h3>Your Current Holdings</h3>
-          {customHoldings.map((item, index) => (
-            <p key={index}>
-              {item.symbol}: {item.amount} @ $
-              {item.price?.toFixed(2) || "–"}
-            </p>
-          ))}
-          <button
-            style={{
-              marginTop: "1rem",
-              padding: "0.5rem 1rem",
-              backgroundColor: "#4caf50",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-            onClick={() => setShowModal(true)}
-          >
-            My Crypto Holding
-          </button>
-        </div>
       </div>
 
       {showModal && (
