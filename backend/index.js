@@ -10,6 +10,7 @@ const stockOwnershipRouter = require("./routers/stockOwnership.js");
 const app = express();
 const server = require("http").createServer(app);
 
+// get info from React Front end on port 3000
 const io = new Server(server, {
     cors: {
         origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
@@ -22,6 +23,8 @@ app.use(
     cors({
         origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
         credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization']
     })
 );
 

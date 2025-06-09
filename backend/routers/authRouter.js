@@ -58,7 +58,7 @@ router
         }
     });
 
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res) => { // Input from Register
     try {
         validateForm(req, res);
 
@@ -67,9 +67,9 @@ router.post("/register", async (req, res) => {
             [req.body.email]
         );
 
-        if (existingUser.rowCount === 0) {
-            const hashedPass = await bcrypt.hash(req.body.password, 10);
-            const newUserQuery = await pool.query(
+        if (existingUser.rowCount === 0) { // see if email is not used
+            const hashedPass = await bcrypt.hash(req.body.password, 10); // encrypt pasword
+            const newUserQuery = await pool.query( // add input and encrypted password to db
                 "INSERT INTO users(email, passhash, first_name, last_name, state_name) values ($1, $2, $3, $4, $5) RETURNING id, email",
                 [req.body.email, hashedPass, req.body.firstName, req.body.lastName, req.body.state]
             );
@@ -89,7 +89,9 @@ router.post("/register", async (req, res) => {
                 lastName: req.body.lastName,
                 state: req.body.state
             });
-        } else {
+        } 
+        
+        else {
             res.status(401).json({loggedIn: false, status: "email taken"});
         }
     } catch (error) {
@@ -100,6 +102,16 @@ router.post("/register", async (req, res) => {
             error: error.message
         });
     }
+});
+
+router.post("/logout", (req, res) => { // log out button
+    req.session.destroy((err) => { // turn loggedIn to false
+        if (err) { // no log out
+            return res.status(500).json({ error: "Could not log out" });
+        }
+        res.clearCookie("sid"); // delete cookies
+        res.json({ message: "Logged out successfully" });
+    });
 });
 
 module.exports = router;

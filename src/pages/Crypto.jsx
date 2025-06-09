@@ -14,8 +14,6 @@ import { AccountContext } from "../components/AccountContext";
 
 const API_KEY = "74a27c82d2a74e1b8544353c5b66ddd3";
 
-const API_KEY = "74a27c82d2a74e1b8544353c5b66ddd3";
-
 const Crypto = () => {
   const [showModal, setShowModal] = useState(false);
   const [customHoldings, setCustomHoldings] = useState([]);

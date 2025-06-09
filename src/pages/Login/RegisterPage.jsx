@@ -64,17 +64,23 @@ const RegisterPage = () => {
 
             // if registration is good, send to /userhome
             if (response.ok && data.loggedIn) {
-                setUser(data.user);
+                // Update the user context with data to customize
+                await setUser({
+                    email: data.email,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    loggedIn: true
+                });
+                
                 navigate('/userhome');
-            }
-            else { // bad registration
+            } else { // bad registration 
                 alert(data.status || 'Registration Failed');
             }
         }
         catch (err) { // express server not connected, check "npm run dev"
-            alert('Server error' + err.message);
+            alert('Server error: ' + err.message);
         }
-      }
+    };
     return (
         <div className='register-container'>
             <div className='logo-container'>

@@ -1,18 +1,20 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import sampleProfilPic from '../assets/petr.png';
 import HeaderBar from "../components/HeaderBar";
 import { AccountContext } from '../components/AccountContext';
 
 export default function UserProfile() {
+  const navigate = useNavigate();
   // get personal info from db
   const { user } = useContext(AccountContext);
-
   const fullName = `${user?.firstName} ${user?.lastName}`;
   const email = `${user?.email}`;
 
   const [profilePic, setProfilePic] = useState(null);
   const [name, setName] = useState(fullName);
   const [contact, setContact] = useState(email);
+  const [funding, setFunding] = useState(2450.75);
   const [transactions, setTransactions] = useState([
     { date: "2025-05-01", detail: "Added $500", amount: 500 },
     { date: "2025-04-20", detail: "Spent on Goal A", amount: -150 },
@@ -30,6 +32,26 @@ export default function UserProfile() {
       const reader = new FileReader();
       reader.onload = () => setProfilePic(reader.result);
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (response.ok) { // good log out
+        setTimeout(() => {
+          navigate('/');
+        }, 100);
+
+      } else { // log out fail 
+        console.error("Logout failed");
+      }
+    } catch (error) { // check server "npm run dev"
+      console.error("Error during logout:", error);
     }
   };
 
@@ -255,6 +277,23 @@ export default function UserProfile() {
           }}
         >
           Update Profile
+        </button>
+
+        {/* Sign Out button */}
+        <button
+          style={{
+            marginTop: "1rem",
+            marginLeft: "1rem",
+            padding: "0.5rem 1rem",
+            backgroundColor: "#f44336",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+          onClick={handleSignOut}
+        >
+          Sign Out
         </button>
       </div>
 

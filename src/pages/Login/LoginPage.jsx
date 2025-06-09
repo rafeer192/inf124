@@ -23,7 +23,7 @@ const LoginPage = () => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:4000/auth/login', {
+            const response = await fetch('http://localhost:4000/auth/login', { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const LoginPage = () => {
                 });
                 // Don't call navigate here
             } else {
-                setError(data.status || 'Login failed');
+                setError('Invalid email or password');
             }
         } catch (err) {
             setError('Server Error');
@@ -57,6 +57,17 @@ const LoginPage = () => {
         <div className='logo-form'><LogoLink /></div>
         <form onSubmit={handleSubmit}>
             <h1> Login for financial services </h1>
+
+            {/* Error Message */}
+            {error && (
+                <div className="error-message" style={{ 
+                    color: 'red', 
+                    textAlign: 'center', 
+                    marginBottom: '10px' 
+                }}>
+                    Invalid email or password
+                </div>
+            )}
 
             {/* EMAIL INPUT */}
             <div className="form-group">

@@ -1,7 +1,7 @@
 // import logo from './logo.svg';
 import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import UserContext from "./components/AccountContext";
 import UserHome from './pages/UserHome'
 import AboutUs from './pages/AboutUs'

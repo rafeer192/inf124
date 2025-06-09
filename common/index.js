@@ -1,3 +1,8 @@
+/*
+    form schema for validateform.js
+    Only for password and email
+    6-28 characters, required
+*/
 const Yup = require("yup");
 
 const formSchema = Yup.object({

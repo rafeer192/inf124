@@ -1,3 +1,8 @@
+/* 
+  Validates input to match form in common/index.js
+  Only for password and email
+  6-28 characters, required
+*/
 const { formSchema } = require('../../common');
 
 const validateForm = (req, res) => {

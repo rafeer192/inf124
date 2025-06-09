@@ -7,28 +7,28 @@ export const AccountContext = createContext();
 const UserContext = ({ children }) => {
   const [user, setUser] = useState({ loggedIn: null });
   useEffect(() => {
-    fetch("http://greenwave-env.eba-mmrhp4e6.us-east-1.elasticbeanstalk.com/auth/login", {
+    fetch("http://localhost:4000/auth/login", { // Express Server on port 4000
       credentials: "include",
     })
-      .catch(err => {
+    .catch(err => { // error, dont log in
+      console.error('Auth check failed:', err);
+      setUser({ loggedIn: false });
+        return;
+    })
+    .then(r => { // unauthorized, dont log in
+      if (!r || !r.ok || r.status >= 400) {
         setUser({ loggedIn: false });
         return;
-      })
-      .then(r => {
-        if (!r || !r.ok || r.status >= 400) {
-          setUser({ loggedIn: false });
-          return;
-        }
-        return r.json();
-      })
-      .then(data => {
-        if (!data) {
-          setUser({ loggedIn: false });
-          return;
-        }
-        setUser({ ...data });
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      }
+      return r.json();
+    })
+    .then(data => { // has data
+      if (!data) { // wrong data
+        setUser({ loggedIn: false });
+        return;
+      }
+      setUser({ ...data }); // right data
+    });
   }, []);
   return (
     <AccountContext.Provider value={{ user, setUser }}>
