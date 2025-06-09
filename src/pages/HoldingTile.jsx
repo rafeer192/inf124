@@ -21,9 +21,8 @@ export default function HoldingTile({ customHoldings = [] }) {
               marginBottom: "0.5rem",
             }}
           >
-            <span style={{ width: "33%" }}>Company</span>
-            <span style={{ width: "33%", textAlign: "center" }}>Last Price</span>
-            <span style={{ width: "33%", textAlign: "right" }}>Your Holding</span>
+            <span style={{ width: "50%" }}>Company</span>
+            <span style={{ width: "50%", textAlign: "right" }}>Your Holding</span>
           </div>
 
           {/* Holdings list */}
@@ -40,11 +39,9 @@ export default function HoldingTile({ customHoldings = [] }) {
                 }}
               >
                 <span style={{ width: "33%" }}>{item.symbol}</span>
-                <span style={{ width: "33%", textAlign: "center" }}>
-                  {item.price ? `$${item.price.toFixed(2)}` : "–"}
-                </span>
+
                 <span style={{ width: "33%", textAlign: "right" }}>
-                  ${parseFloat(item.amount).toFixed(2)}
+                  {parseFloat(item.amount).toFixed(2)}
                 </span>
               </li>
             ))}

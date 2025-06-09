@@ -74,7 +74,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   }, [stockSymbol]);
   useEffect(() => {
     const fetchUserHoldings = async () => {
-      if (user && user.loggedIn && user.id) {
+      if (showModal && user && user.loggedIn && user.id) {
         try {
           const response = await fetch("http://localhost:4000/api/stocks", {
             credentials: "include", // Essential for sending session cookies
@@ -91,14 +91,11 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
           console.error("Failed to fetch user holdings:", response.status, errorText);
           setErrorMessage(`Failed to load your holdings: ${errorText}`);
         }
-      } catch (error) {
-        console.error("Network error fetching holdings:", error);
-        setErrorMessage("Network error fetching your holdings.");
-      }
-      } else {
-      // If user is not logged in, clear holdings
-      setCustomHoldings([]);
-      }
+        } catch (error) {
+          console.error("Network error fetching holdings:", error);
+          setErrorMessage("Network error fetching your holdings.");
+        }
+      } 
     };
     fetchUserHoldings();
   }, [user, user.loggedIn, user.id]); // Dependencies: re-run when user context or login status changes
@@ -420,17 +417,13 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
               >
                 <div style={{ width: "25%" }}>Stock Symbol</div>
                 <div style={{ width: "25%", textAlign: "center" }}>Shares Owned</div>
-                <div style={{ width: "25%", textAlign: "right" }}>Last Holding Value</div>
                 <div style={{ width: "25%", textAlign: "right" }}>Actions</div>
               </div>
             )}
 
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               {customHoldings.map((item, index) => {
-                // Use local state for editing amount per item
-                // But inside map we can't call hooks conditionally, so we will lift this logic outside
 
-                // Instead, we'll create a controlled component for each item below:
                 return (
                   <EditableHoldingItem
                     key={index}
@@ -506,11 +499,7 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
         }}
       />
 
-      <span style={{ width: "25%", textAlign: "right" }}>
-        {item.price
-          ? `$${(parseFloat(editedAmount || "0") * item.price).toFixed(2)}`
-          : "–"}
-      </span>
+
 
       <div
         style={{
