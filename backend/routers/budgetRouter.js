@@ -39,9 +39,7 @@ router.post('/', async (req, res) => {
 
     // Insert new budget categories
     const insertText = 'INSERT INTO budget_tracking (user_id, category, amount) VALUES ($1, $2, $3)';
-    console.log(budget);
     for (const item of budget) {
-      console.log('Item:', item, 'typeof amount:', typeof item.amount);
       if (!item.category || isNaN(item.amount) || item.amount < 0) {
         console.log('❌ Rejected item:', item);
         await db.query('ROLLBACK');
