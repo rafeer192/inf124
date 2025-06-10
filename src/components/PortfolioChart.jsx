@@ -19,7 +19,7 @@ const defaultAssets = [
 
 export default function PortfolioChart() {
   const [portfolio, setPortfolio] = useState([]);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     fetch(`${API_URL}/api/portfolio`, {

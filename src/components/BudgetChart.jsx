@@ -25,7 +25,7 @@ const defaultCategories = [
 export default function BudgetChart() {
   const [budget, setbudget] = useState([]);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
   
     fetch(`${API_URL}/api/budget`, {

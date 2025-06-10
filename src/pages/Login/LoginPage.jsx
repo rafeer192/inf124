@@ -21,7 +21,7 @@ const LoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
         try {
             const response = await fetch(`${API_URL}/auth/login`, { // fetch express server
