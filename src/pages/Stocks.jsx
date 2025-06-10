@@ -25,7 +25,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   const { user } = useContext(AccountContext);
   const fullName = `${user?.firstName} ${user?.lastName}`;
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchCompanySuggestions = async (query) => {
     if (!query) {
