@@ -51,7 +51,7 @@ const RegisterPage = () => {
         };
 
         try {
-            const response = await fetch(`${API_URL}/auth/register`, { // fetch express server
+            const response = await fetch("https://inf124-production.up.railway.app/auth/register", { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
