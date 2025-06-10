@@ -70,4 +70,9 @@ server.listen(4000, () => {
     console.log("Server is listening on port 4000");
 });
 
+// health check
+app.get("/health", (req, res) => {
+  res.status(200).send("Server is healthy");
+});
+
 module.exports = app

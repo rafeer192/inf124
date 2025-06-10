@@ -36,7 +36,7 @@ const RegisterPage = () => {
             [name]: type === 'checkbox' ? checked : value
         }));
       };
-
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
       const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -51,9 +51,7 @@ const RegisterPage = () => {
         };
 
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-            console.log(API_URL)
-            const response = await fetch(`${API_URL}/auth/register`, { // fetch express server
+            const response = await fetch("https://inf124-production.up.railway.app/auth/register", { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,7 +78,7 @@ const RegisterPage = () => {
             }
         }
         catch (err) { // express server not connected, check "npm run dev"
-            alert('Server error: ' + err.message + API_URL);
+            alert('Server error: ' + err.message);
         }
     };
     return (
