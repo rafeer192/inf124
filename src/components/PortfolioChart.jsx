@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
-import Select from 'react-select';
 import '../styles/PortfolioChart.css';
 import { AccountContext } from "./AccountContext";
 
@@ -21,14 +20,13 @@ export default function PortfolioChart() {
   const [portfolio, setPortfolio] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/portfolio', {
+    fetch('http://18.188.117.218:4000/api/portfolio', {
       method: 'GET',
       credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.portfolio) {
-          console.log(data.portfolio);
           setPortfolio(data.portfolio);
         }
       })
@@ -41,8 +39,7 @@ export default function PortfolioChart() {
       percent: Number(item.percent),
     }));
     setPortfolio(sanitizedPortfolio);
-    console.log(sanitizedPortfolio);
-    fetch('http://localhost:4000/api/portfolio', {
+    fetch('http://18.188.117.218:4000/api/portfolio', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

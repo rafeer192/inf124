@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
-import Select from 'react-select';
 import '../styles/PortfolioChart.css';
 import { AccountContext } from "./AccountContext";
 
@@ -26,7 +25,7 @@ export default function BudgetChart() {
   const [budget, setbudget] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/budget', {
+    fetch('http://18.188.117.218:4000/api/portfolio', {
       method: 'GET',
       credentials: 'include',
     })
@@ -45,7 +44,7 @@ export default function BudgetChart() {
       amount: Number(item.amount),
     }));
     setbudget(sanitizedBudget);
-    fetch('http://localhost:4000/api/budget', {
+    fetch('http://18.188.117.218:4000/api/budget', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

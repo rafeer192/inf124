@@ -33,4 +33,15 @@ CREATE TABLE budget_tracking (
     amount NUMERIC NOT NULL, 
     UNIQUE (user_id, category)
 );
+
+CREATE TABLE goals (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  subject TEXT NOT NULL,
+  category TEXT,
+  priority TEXT,
+  notes TEXT,
+  deadline DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 INSERT INTO users(email, passhash) values ($1,$2);

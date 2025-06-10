@@ -8,7 +8,8 @@ const authRouter = require("./routers/authRouter");
 const session = require("express-session");
 const stockOwnershipRouter = require("./routers/stockOwnership.js");
 const portfolioRouter = require("./routers/portfolioRouter.js");
-const budgetRouter = require("./routers/budgetRouter.js")
+const budgetRouter = require("./routers/budgetRouter.js");
+const goalRouter = require("./routers/goalRouter.js");
 const app = express();
 const server = require("http").createServer(app);
 
@@ -33,6 +34,8 @@ app.use(
 app.use(express.json());
 app.use(session({ // create cookies so user doesn't have to relog when refreshing page
     secret: process.env.COOKIE_SECRET || "default_secret",
+    resave: false,
+    saveUninitialized: false,
     credentials: true,
     name: "sid",
     saveUninitialized: false,
@@ -49,6 +52,7 @@ app.use("/auth", authRouter);
 app.use("/api/stocks", stockOwnershipRouter);
 app.use("/api/portfolio", portfolioRouter); 
 app.use("/api/budget", budgetRouter);
+app.use("/api/goals", goalRouter);
 
 
 io.on("connect", socket => {
