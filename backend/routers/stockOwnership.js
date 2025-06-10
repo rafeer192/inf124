@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
-const authenticate = require("../../middleware/authenticate.js");
+const authenticate = require("../middleware/authenticate.js");
 
 // GET all stocks owned by logged in user
 router.get("/", authenticate, async (req, res) => {
