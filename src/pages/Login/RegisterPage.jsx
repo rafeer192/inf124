@@ -80,7 +80,7 @@ const RegisterPage = () => {
             }
         }
         catch (err) { // express server not connected, check "npm run dev"
-            alert('Server error: ' + err.message);
+            alert('Server error: ' + err.message + API_URL);
         }
     };
     return (
