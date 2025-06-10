@@ -27,8 +27,6 @@ export default function BudgetChart() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/budget`, {
-  
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/budget`, {
       method: 'GET',
       credentials: 'include',
     })

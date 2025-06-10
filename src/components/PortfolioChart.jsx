@@ -21,7 +21,7 @@ export default function PortfolioChart() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    fetch('http://18.188.117.218:4000/api/portfolio', {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/some-endpoint`, {
       method: 'GET',
       credentials: 'include',
     })
@@ -41,7 +41,7 @@ export default function PortfolioChart() {
     }));
     setPortfolio(sanitizedPortfolio);
     console.log(sanitizedPortfolio);
-    fetch(`${API_URL}/api/portfolio`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/some-endpoint`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
