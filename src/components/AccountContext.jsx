@@ -7,7 +7,8 @@ export const AccountContext = createContext();
 const UserContext = ({ children }) => {
   const [user, setUser] = useState({ loggedIn: null });
   useEffect(() => {
-    fetch("http://localhost:4000/auth/login", { // Express Server on port 4000
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    fetch(`${API_URL}/auth/login`, { // Express Server on port 4000
       credentials: "include",
     })
     .catch(err => { // error, dont log in

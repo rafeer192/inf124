@@ -13,10 +13,16 @@ const goalRouter = require("./routers/goalRouter.js");
 const app = express();
 const server = require("http").createServer(app);
 
-// get info from React Front end on port 3000
+// get info from React Front end on port 3000 or vercel website
+const allowedOrigins = [
+    process.env.CLIENT_ORIGIN,
+    'https://inf124.vercel.app',
+    "http://localhost:3000"
+].filter(Boolean); // Remove any undefined values
+
 const io = new Server(server, {
     cors: {
-        origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+        origin: allowedOrigins,
         credentials: "true",
     },
 });
@@ -24,26 +30,26 @@ const io = new Server(server, {
 app.use(helmet());
 app.use(
     cors({
-        origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+        origin: allowedOrigins,
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization']
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        exposedHeaders: ['set-cookie']
     })
 );
 
 app.use(express.json());
 app.use(session({ // create cookies so user doesn't have to relog when refreshing page
     secret: process.env.COOKIE_SECRET || "default_secret",
-    resave: false,
-    saveUninitialized: false,
     credentials: true,
     name: "sid",
     saveUninitialized: false,
     cookie: {
-        secure: process.env.ENVIRONMENT === "production" ? "true" : "auto",
+        secure: true,  // Force secure in production
         httpOnly: true,
+        sameSite: 'none', // Required for cross-site cookies
         expires: 1000 * 60 * 60 * 24 * 7, // 7 days
-        sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax",
+        domain: '.railway.app' // Adjust this to match your Railway domain
     },
 })
 );
@@ -60,9 +66,8 @@ io.on("connect", socket => {
 });
 
 // EXPRESS SERVER
-const port = process.env.PORT || 4000;
-server.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
+server.listen(4000, () => {
+    console.log("Server is listening on port 4000");
 });
 
 module.exports = app

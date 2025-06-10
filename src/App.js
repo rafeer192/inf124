@@ -20,40 +20,40 @@ function App() {
   const [customHoldings, setCustomHoldings] = useState([]);
   
   return (
-      <UserContext>
-        <Routes>
-          {/* NO ACCOUNT NEEDED */}
-          {/* ABOUT US PAGE == landing page */}
-          <Route path='/' element={<AboutUs />} /> 
-          {/* EXISTING USER LOG IN PAGE */}
-          <Route path='/login' element={<LoginPage/>} />
-          {/* REGISTER PAGE */}
-          <Route path='/register' element={<RegisterPage/>} />
-          {/* Terms And Conditions */}
-          <Route path='/terms' element={<TermsAndConditions/>} />
-          {/* Contact Us */}
-          <Route path='/contact' element={<ContactUs/>} />
+    <UserContext>
+      <Routes>
+        {/* NO ACCOUNT NEEDED */}
+        {/* ABOUT US PAGE == landing page */}
+        <Route path='/' element={<AboutUs />} /> 
+        {/* EXISTING USER LOG IN PAGE */}
+        <Route path='/login' element={<LoginPage/>} />
+        {/* REGISTER PAGE */}
+        <Route path='/register' element={<RegisterPage/>} />
+        {/* Terms And Conditions */}
+        <Route path='/terms' element={<TermsAndConditions/>} />
+        {/* Contact Us */}
+        <Route path='/contact' element={<ContactUs/>} />
 
-          {/* ACCOUNT NEEDED */}
-          <Route element={<PrivateRoutes />}>
-            {/* Goal PAGE */}
-            <Route path='/goal' element={<GoalPage/>} />
-            {/*User Profile */}
-            <Route path='/profile' element={<UserProfile/>} />
-            {/* Contact Us page for logged in users */}
-            <Route path='/contactloggedin' element={<ContactUsLoggedIn/>} />
-            {/* User's Home page */}
-            <Route path='/userhome' element={<UserHome customHoldings={customHoldings} />} />
-            {/* View Crypto */}
-            <Route path='/crypto' element={<Crypto/>} />
-            {/* View Stocks */}
-            <Route path='/stocks' element={<Stocks customHoldings={customHoldings} setCustomHoldings={setCustomHoldings} />} />
-          </Route>
+        {/* ACCOUNT NEEDED */}
+        <Route element={<PrivateRoutes />}>
+          {/* Goal PAGE */}
+          <Route path='/goal' element={<GoalPage/>} />
+          {/*User Profile */}
+          <Route path='/profile' element={<UserProfile/>} />
+          {/* Contact Us page for logged in users */}
+          <Route path='/contactloggedin' element={<ContactUsLoggedIn/>} />
+          {/* User's Home page */}
+          <Route path='/userhome' element={<UserHome customHoldings={customHoldings} />} />
+          {/* View Crypto */}
+          <Route path='/crypto' element={<Crypto/>} />
+          {/* View Stocks */}
+          <Route path='/stocks' element={<Stocks customHoldings={customHoldings} setCustomHoldings={setCustomHoldings} />} />
+        </Route>
 
-          {/* REDIRECT TO LANDING PAGE FOR OTHER ENDPOINTS */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </UserContext>    
+        {/* REDIRECT TO LANDING PAGE FOR OTHER ENDPOINTS */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </UserContext>
   );
 }
 

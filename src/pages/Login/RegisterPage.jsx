@@ -51,7 +51,9 @@ const RegisterPage = () => {
         };
 
         try {
-            const response = await fetch ("http://localhost:4000/auth/register", { // fetch express server
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+            console.log(API_URL)
+            const response = await fetch(`${API_URL}/auth/register`, { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,7 +80,7 @@ const RegisterPage = () => {
             }
         }
         catch (err) { // express server not connected, check "npm run dev"
-            alert('Server error: ' + err.message);
+            alert('Server error: ' + err.message + API_URL);
         }
     };
     return (

@@ -13,6 +13,17 @@ export default function GoalCustomizer() {
   const [goals, setGoals] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
+  useEffect(() => {
+  const storedGoals = localStorage.getItem("userGoals");
+    if (storedGoals) {
+      setGoals(JSON.parse(storedGoals));
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("userGoals", JSON.stringify(goals));
+  }, [goals]);
+
+
   const finalCategory = category === "custom" ? customCategory : category;
   const validGoals = goals.filter((g) => g.text && g.text.trim() !== "");
 
@@ -21,7 +32,7 @@ export default function GoalCustomizer() {
   const fullName = `${user?.firstName} ${user?.lastName}`;
 
   const handleSubmit = () => {
-    if (!subject || !user || !date || !details) {
+    if (!subject || !customUser || !date || !details) {
       alert("Please fill out all required fields.");
       return;
     }

@@ -24,8 +24,11 @@ const defaultCategories = [
 export default function BudgetChart() {
   const [budget, setbudget] = useState([]);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
-    fetch('http://18.188.117.218:4000/api/portfolio', {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/budget`, {
+  
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/budget`, {
       method: 'GET',
       credentials: 'include',
     })
@@ -44,7 +47,7 @@ export default function BudgetChart() {
       amount: Number(item.amount),
     }));
     setbudget(sanitizedBudget);
-    fetch('http://18.188.117.218:4000/api/budget', {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/budget`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

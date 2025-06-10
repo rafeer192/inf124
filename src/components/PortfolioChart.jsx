@@ -18,6 +18,7 @@ const defaultAssets = [
 
 export default function PortfolioChart() {
   const [portfolio, setPortfolio] = useState([]);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     fetch('http://18.188.117.218:4000/api/portfolio', {
@@ -39,7 +40,8 @@ export default function PortfolioChart() {
       percent: Number(item.percent),
     }));
     setPortfolio(sanitizedPortfolio);
-    fetch('http://18.188.117.218:4000/api/portfolio', {
+    console.log(sanitizedPortfolio);
+    fetch(`${API_URL}/api/portfolio`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
