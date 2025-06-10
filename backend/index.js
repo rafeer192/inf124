@@ -12,10 +12,15 @@ const budgetRouter = require("./routers/budgetRouter.js")
 const app = express();
 const server = require("http").createServer(app);
 
-// get info from React Front end on port 3000
+// get info from React Front end on port 3000 or vercel website
+const allowedOrigins = [
+    process.env.CLIENT_ORIGIN,
+    "http://localhost:3000"
+].filter(Boolean); // Remove any undefined values
+
 const io = new Server(server, {
     cors: {
-        origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+        origin: allowedOrigins,
         credentials: "true",
     },
 });
@@ -23,7 +28,7 @@ const io = new Server(server, {
 app.use(helmet());
 app.use(
     cors({
-        origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+        origin: allowedOrigins,
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization']

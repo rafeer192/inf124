@@ -51,7 +51,8 @@ const RegisterPage = () => {
         };
 
         try {
-            const response = await fetch ("http://localhost:4000/auth/register", { // fetch express server
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+            const response = await fetch(`${API_URL}/auth/logout`, { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

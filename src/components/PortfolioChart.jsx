@@ -19,9 +19,10 @@ const defaultAssets = [
 
 export default function PortfolioChart() {
   const [portfolio, setPortfolio] = useState([]);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/portfolio', {
+    fetch(`${API_URL}/api/portfolio`, {
       method: 'GET',
       credentials: 'include',
     })
@@ -42,7 +43,7 @@ export default function PortfolioChart() {
     }));
     setPortfolio(sanitizedPortfolio);
     console.log(sanitizedPortfolio);
-    fetch('http://localhost:4000/api/portfolio', {
+    fetch(`${API_URL}/api/portfolio`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

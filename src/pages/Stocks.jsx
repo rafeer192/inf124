@@ -25,7 +25,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   const { user } = useContext(AccountContext);
   const fullName = `${user?.firstName} ${user?.lastName}`;
 
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
   const fetchCompanySuggestions = async (query) => {
     if (!query) {
@@ -116,7 +116,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
   };
   const showUserHoldings = async() => {
       try {
-        const response = await fetch("http://localhost:4000/api/stocks", {
+        const response = await fetch(`${API_URL}/api/stocks`, {
         credentials: "include", // Essential for sending session cookies
       });
       console.log(response);
@@ -341,7 +341,7 @@ const Stocks = ({ customHoldings, setCustomHoldings }) => {
                   const currentPrice = parseFloat(quoteData.close);
 
                   // 2. Send data to backend API
-                  const response = await fetch("http://localhost:4000/api/stocks", {
+                  const response = await fetch(`${API_URL}/api/stocks`, {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
@@ -521,7 +521,7 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
               }
 
               try {
-                const response = await fetch(`http://localhost:4000/api/stocks/${item.ticker}`, {
+                const response = await fetch(`${API_URL}/api/stocks/${item.ticker}`, {
                   method: "PUT",
                   headers: {
                     "Content-Type": "application/json",
@@ -572,7 +572,7 @@ function EditableHoldingItem({ item, index, customHoldings, setCustomHoldings })
         onClick={async () => {
           if (window.confirm(`Are you sure you want to delete ${item.ticker}?`)) { // Add confirmation
             try {
-              const response = await fetch(`http://localhost:4000/api/stocks/${item.ticker}`, {
+              const response = await fetch(`${API_URL}/api/stocks/${item.ticker}`, {
                 method: "DELETE",
                 credentials: "include", // Crucial for session cookies
               });
