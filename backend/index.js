@@ -15,6 +15,7 @@ const server = require("http").createServer(app);
 // get info from React Front end on port 3000 or vercel website
 const allowedOrigins = [
     process.env.CLIENT_ORIGIN,
+    'https://inf1245.vercel.app',
     "http://localhost:3000"
 ].filter(Boolean); // Remove any undefined values
 
@@ -37,7 +38,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use(session({
+app.use(session({ // create cookies so user doesn't have to relog when refreshing page
     secret: process.env.COOKIE_SECRET,
     credentials: true,
     name: "sid",
