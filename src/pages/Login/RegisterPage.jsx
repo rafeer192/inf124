@@ -52,7 +52,7 @@ const RegisterPage = () => {
 
         try {
             const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-            const response = await fetch(`${API_URL}/auth/logout`, { // fetch express server
+            const response = await fetch("https://inf1243.vercel.app/auth/register", { // fetch express server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
